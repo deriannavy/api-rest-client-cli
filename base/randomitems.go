@@ -1,4 +1,4 @@
-package inspo
+package main
 
 import (
 	"math/rand"

@@ -1,4 +1,4 @@
-package inspo
+package main
 
 import (
 	"fmt"
@@ -14,7 +14,7 @@ var (
 	appStyle = lipgloss.NewStyle().Padding(1, 2)
 
 	titleStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#FFFDF5")).
+			Foreground(lipgloss.Color("#FFFFFF")).
 			Background(lipgloss.Color("#25A065")).
 			Padding(0, 1)
 
@@ -175,7 +175,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() string {
-	return appStyle.Render(m.list.View())
+	return appStyle.Render(m.list.View() + m.list.View())
 }
 
 func main() {

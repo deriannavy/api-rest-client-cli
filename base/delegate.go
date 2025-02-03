@@ -1,4 +1,4 @@
-package inspo
+package main
 
 import (
 	"github.com/charmbracelet/bubbles/key"
