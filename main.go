@@ -12,6 +12,9 @@ import (
 
 
 var (
+
+	ListConfig ListConfiguration
+
 	appStyle = lipgloss.NewStyle().Padding(1, 2)
 
 	titleStyle = lipgloss.NewStyle().
@@ -28,7 +31,7 @@ type item struct {
 
 func (i item) Title() string       { return i.title }
 func (i item) Description() string { return i.description }
-func (i item) FilterValue() string { return i.title }
+func (i item) FilterValue() string { return i.title + i.description }
 
 
 type model struct {
@@ -61,11 +64,23 @@ func (m model) View() string {
 
 func main(){
 
-	items := []list.Item{
-		item{title: "Raspberry Pi’s", description: "I have ’em all over my house"},
-	}
+	loadConfig(&ListConfig)
 
-	m := model{list: list.New(items, list.NewDefaultDelegate(), 0, 0)}
+	var items []list.Item
+
+	for _, lci := range ListConfig.Configurations {
+		items = append(items, lci.toItem())
+	}	
+
+
+
+	ls := list.NewDefaultDelegate()
+
+	// c := lipgloss.Color("#ff00ff")
+	// ls.Styles.SelectedTitle = ls.Styles.SelectedTitle.Foreground(c).BorderLeftForeground(c)
+	// ls.Styles.SelectedDesc = ls.Styles.SelectedTitle.Copy() 
+
+	m := model{list: list.New(items, ls, 0, 0)}
 	m.list.Title = "Requests"
 
 	p := tea.NewProgram(m, tea.WithAltScreen())
