@@ -33,7 +33,6 @@ type ListConfiguration struct {
 func (c Config) toItem() item {
 
 	name := fmt.Sprintf("%s %s", c.Request.Method, c.Name)
-	// method := c.Request.Method
 
 	p := ""
 	if c.Server.Port != "" {
@@ -47,11 +46,32 @@ func (c Config) toItem() item {
 		p,
 	)
 
-	// c.ID, name, method, uri
-	return item{
-		title: name,
-		description: uri,
+	return item{c.ID, name, uri}
+}
+
+func (c Config) getUri() string {
+
+	p := ""
+	if c.Server.Port != "" {
+		p = fmt.Sprintf(":%s", c.Server.Port)
 	}
+
+	uri := fmt.Sprintf("%s%s%s%s",
+		c.Server.Protocol,
+		c.Server.Host,
+		c.Request.Path,
+		p,
+	)
+
+	return uri
+}
+
+func (c Config) getName() string {
+	return fmt.Sprintf("%s%s", c.Name, c.Request.Method)
+}
+
+func (lc ListConfiguration) getConfigByIndex(index int) Config {
+	return lc.Configurations[index]
 }
 
 func check(e error) {
