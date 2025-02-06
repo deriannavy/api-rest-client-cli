@@ -1,0 +1,10 @@
+
+name: "Pets"
+
+server:
+  protocol: "https://"
+  host: "localhost"
+
+request:
+  method: "POST"
+  path: "/base"
