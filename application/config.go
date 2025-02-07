@@ -1,10 +1,12 @@
-package main
+package application
 
 import (
 	"fmt"
 	"os"
 	"strconv"
 
+	"github.com/charmbracelet/bubbles/list"
+	"github.com/deriannavy/api-rest-client-cli/components"
 	"gopkg.in/yaml.v2"
 )
 
@@ -30,9 +32,7 @@ type ListConfiguration struct {
 	Configurations []Config
 }
 
-func (c Config) toItem() item {
-
-	name := fmt.Sprintf("%s %s", c.Request.Method, c.Name)
+func (c Config) toItem() components.Item {
 
 	p := ""
 	if c.Server.Port != "" {
@@ -46,7 +46,8 @@ func (c Config) toItem() item {
 		p,
 	)
 
-	return item{c.ID, name, uri}
+	item := components.NewItem(c.ID, c.Name, uri)
+	return item
 }
 
 func (c Config) getUri() string {
@@ -66,12 +67,18 @@ func (c Config) getUri() string {
 	return uri
 }
 
-func (c Config) getName() string {
-	return fmt.Sprintf("%s%s", c.Name, c.Request.Method)
+func (lc ListConfiguration) GetConfigByIndex(index int) Config {
+	return lc.Configurations[index]
 }
 
-func (lc ListConfiguration) getConfigByIndex(index int) Config {
-	return lc.Configurations[index]
+func (lc ListConfiguration) GetItemList() []list.Item {
+
+	var items []list.Item
+	for _, lci := range lc.Configurations {
+		items = append(items, lci.toItem())
+	}
+
+	return items
 }
 
 func check(e error) {
@@ -80,7 +87,7 @@ func check(e error) {
 	}
 }
 
-func loadConfig(lcfg *ListConfiguration) {
+func LoadConfig(lcfg *ListConfiguration) {
 
 	folderName := "config"
 
