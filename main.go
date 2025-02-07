@@ -56,7 +56,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() string {
-	// centralStyle.Render(CurrentConfig)
+
 	return AppStyle.Render(
 		lipgloss.JoinHorizontal(
 			lipgloss.Top,
@@ -71,6 +71,7 @@ func main() {
 	app.LoadConfig(&ListConfig)
 
 	items := ListConfig.GetItemList()
+	// selectedItem := items[0].
 
 	m := model{
 		list:  components.NewList(items),

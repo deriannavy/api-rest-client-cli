@@ -1,4 +1,4 @@
-package components
+package application
 
 type Item struct {
 	id          string
@@ -6,6 +6,7 @@ type Item struct {
 	description string
 }
 
+func (i Item) Id() string          { return i.id }
 func (i Item) Title() string       { return i.title }
 func (i Item) Description() string { return i.description }
 func (i Item) FilterValue() string { return i.title + i.description }

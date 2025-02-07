@@ -1,10 +1,13 @@
 package components
 
-import "github.com/deriannavy/api-rest-client-cli/panel"
+import (
+	"github.com/deriannavy/api-rest-client-cli/application"
+	"github.com/deriannavy/api-rest-client-cli/panel"
+)
 
-func NewPanel() panel.Model {
+func NewPanel(Config application.Config) panel.Model {
 
-	p := panel.New()
+	p := panel.New(Config)
 
 	return p
 }
