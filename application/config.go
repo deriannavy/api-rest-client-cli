@@ -23,10 +23,10 @@ type Config struct {
 }
 
 func (c Config) toItem() Item {
-	return NewItem(c.ID, c.Name, c.getUri())
+	return NewItem(c.ID, c.Name, c.GetUri())
 }
 
-func (c Config) getUri() string {
+func (c Config) GetUri() string {
 
 	p := ""
 	if c.Server.Port != "" {

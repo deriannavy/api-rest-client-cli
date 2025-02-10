@@ -50,9 +50,22 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.list.SetSize(msg.Width-h, msg.Height-v)
 	}
 
-	var cmd tea.Cmd
-	m.list, cmd = m.list.Update(msg)
-	return m, cmd
+	var (
+		cmds []tea.Cmd
+		listCmd tea.Cmd
+		panelCmd tea.Cmd
+	)
+	
+	m.list, listCmd = m.list.Update(msg)
+	cmds = append(cmds, listCmd)
+
+	globalIndex := m.list.Index()
+	m.panel.SetCurrentConfig(globalIndex)
+
+	m.panel, panelCmd = m.panel.Update(msg)
+	cmds = append(cmds, panelCmd)
+
+	return m, tea.Batch(cmds...)
 }
 
 func (m model) View() string {
@@ -71,11 +84,11 @@ func main() {
 	app.LoadConfig(&ListConfig)
 
 	items := ListConfig.GetItemList()
-	// selectedItem := items[0].
+	itemsConfig := ListConfig.Configurations
 
 	m := model{
 		list:  components.NewList(items),
-		panel: components.NewPanel(),
+		panel: components.NewPanel(itemsConfig),
 	}
 
 	p := tea.NewProgram(m, tea.WithAltScreen())

@@ -13,7 +13,7 @@ type ListConfiguration struct {
 	Configurations []Config
 }
 
-func (lc ListConfiguration) GetConfigById(index int) Config {
+func (lc ListConfiguration) GetConfigByIndex(index int) Config {
 	return lc.Configurations[index]
 }
 

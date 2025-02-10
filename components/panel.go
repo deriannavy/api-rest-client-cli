@@ -5,9 +5,9 @@ import (
 	"github.com/deriannavy/api-rest-client-cli/panel"
 )
 
-func NewPanel(Config application.Config) panel.Model {
+func NewPanel(itemsConfig []application.Config) panel.Model {
 
-	p := panel.New(Config)
+	p := panel.New(itemsConfig)
 
 	return p
 }
