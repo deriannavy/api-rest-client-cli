@@ -7,32 +7,20 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	app "github.com/deriannavy/api-rest-client-cli/application"
+	"github.com/deriannavy/api-rest-client-cli/components"
+	"github.com/deriannavy/api-rest-client-cli/panel"
 )
 
 var (
-	ListConfig ListConfiguration
+	ListConfig app.ListConfiguration
 
-	appStyle = lipgloss.NewStyle().Padding(1, 2)
-
-	titleStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#FFFFFF")).Background(lipgloss.Color("#25A065")).Padding(0, 1)
-
-	urlStyle = lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("204")).Background(lipgloss.Color("235")).Padding(1, 2)
-
-	CurrentConfig string
+	AppStyle = lipgloss.NewStyle().Padding(1, 2)
 )
 
-type item struct {
-	id          string
-	title       string
-	description string
-}
-
-func (i item) Title() string       { return i.title }
-func (i item) Description() string { return i.description }
-func (i item) FilterValue() string { return i.title + i.description }
-
 type model struct {
-	list list.Model
+	list  list.Model
+	panel panel.Model
 }
 
 func (m model) Init() tea.Cmd {
@@ -41,15 +29,16 @@ func (m model) Init() tea.Cmd {
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
-	indx := m.list.Index()
-	selectedConfig := ListConfig.getConfigByIndex(indx)
-	// getUri
-	selectedConfigView := fmt.Sprintf(
-		"%s \n%s",
-		selectedConfig.getName(),
-		urlStyle.Render(selectedConfig.getUri()),
-	)
-	CurrentConfig = fmt.Sprintf("%v", selectedConfigView)
+	// indx := m.list.Index()
+	// selectedConfig := ListConfig.getConfigByIndex(indx)
+
+	// selectedConfigView := fmt.Sprintf(
+	// 	"%s \n%s %s",
+	// 	selectedConfig.Name,
+	// 	selectedConfig.Request.Method,
+	// 	urlStyle.Render(selectedConfig.getUri()),
+	// )
+	// CurrentConfig = fmt.Sprintf("%v", selectedConfigView)
 
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
@@ -57,39 +46,50 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		}
 	case tea.WindowSizeMsg:
-		h, v := appStyle.GetFrameSize()
+		h, v := AppStyle.GetFrameSize()
 		m.list.SetSize(msg.Width-h, msg.Height-v)
 	}
 
-	var cmd tea.Cmd
-	m.list, cmd = m.list.Update(msg)
-	return m, cmd
+	var (
+		cmds []tea.Cmd
+		listCmd tea.Cmd
+		panelCmd tea.Cmd
+	)
+	
+	m.list, listCmd = m.list.Update(msg)
+	cmds = append(cmds, listCmd)
+
+	globalIndex := m.list.Index()
+	m.panel.SetCurrentConfig(globalIndex)
+
+	m.panel, panelCmd = m.panel.Update(msg)
+	cmds = append(cmds, panelCmd)
+
+	return m, tea.Batch(cmds...)
 }
 
 func (m model) View() string {
-	return appStyle.Render(lipgloss.JoinHorizontal(lipgloss.Top, m.list.View(), CurrentConfig))
+
+	return AppStyle.Render(
+		lipgloss.JoinHorizontal(
+			lipgloss.Top,
+			m.list.View(),
+			m.panel.View(),
+		),
+	)
 }
 
 func main() {
 
-	loadConfig(&ListConfig)
+	app.LoadConfig(&ListConfig)
 
-	var items []list.Item
+	items := ListConfig.GetItemList()
+	itemsConfig := ListConfig.Configurations
 
-	for _, lci := range ListConfig.Configurations {
-		items = append(items, lci.toItem())
+	m := model{
+		list:  components.NewList(items),
+		panel: components.NewPanel(itemsConfig),
 	}
-
-	ls := list.NewDefaultDelegate()
-
-	c := lipgloss.Color("#ff00ff")
-	style := ls.Styles.SelectedTitle.Foreground(c).BorderLeftForeground(c)
-	ls.Styles.SelectedTitle = style
-	ls.Styles.SelectedDesc = style
-
-	m := model{list: list.New(items, ls, 0, 0)}
-	m.list.Title = "Requests"
-	m.list.Styles.Title = titleStyle
 
 	p := tea.NewProgram(m, tea.WithAltScreen())
 
