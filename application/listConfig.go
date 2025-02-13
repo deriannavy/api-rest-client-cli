@@ -34,7 +34,7 @@ func check(e error) {
 	}
 }
 
-func LoadConfigFolder(lcfg *ListConfiguration) {
+func LoadConfig(lcfg *ListConfiguration) {
 
 	folderName := "config"
 
