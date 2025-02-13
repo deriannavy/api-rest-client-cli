@@ -50,12 +50,10 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.list.SetSize(msg.Width-h, msg.Height-v)
 	}
 
-	var (
-		cmds []tea.Cmd
-		listCmd tea.Cmd
-		panelCmd tea.Cmd
-	)
-	
+	var cmds []tea.Cmd
+	var listCmd tea.Cmd
+	var panelCmd tea.Cmd
+
 	m.list, listCmd = m.list.Update(msg)
 	cmds = append(cmds, listCmd)
 

@@ -1,0 +1,10 @@
+
+name: "Pets"
+
+server:
+  protocol: "http://"
+  host: "localhost"
+  port: 8008
+
+request:
+  method: "GET"

@@ -18,6 +18,7 @@ func NewList(items []list.Item) list.Model {
 
 	nlist.SetShowTitle(false)
 	nlist.SetShowStatusBar(false)
+	nlist.InfiniteScrolling = true
 
 	return nlist
 }

@@ -1,0 +1,1955 @@
+{
+	"info": {
+		"_postman_id": "7860a0e4-4d27-492f-86c2-b267b0750941",
+		"name": "Servicios Upgrade Remoto",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28682652"
+	},
+	"item": [
+		{
+			"name": "Desarrollo",
+			"item": [
+				{
+					"name": "Cifrado_INE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let body_Request  = pm.request.body.raw;\r",
+									"let url_base_encriptado = \"https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/venn\";\r",
+									"let id_secret = pm.variables.get(\"id_secret\");\r",
+									"let identidad= JSON.parse(body_Request).identidad\r",
+									"\r",
+									"console.log(identidad);\r",
+									"\r",
+									"    const postRequestCifrarDatosLogin = {\r",
+									"        url:  url_base_encriptado + '/encriptar',\r",
+									"        method: 'POST',\r",
+									"        header: {\r",
+									"                'Content-Type': 'application/json',\r",
+									"                'X-Foo': 'bar'\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify({ \r",
+									"                identidad: JSON.stringify(identidad),   \r",
+									"                id_secret : id_secret                     \r",
+									"            })\r",
+									"        } \r",
+									"    };\r",
+									"    console.log(JSON.stringify({ \r",
+									"                identidad: JSON.stringify(identidad),   \r",
+									"                id_secret : id_secret                     \r",
+									"            }));\r",
+									"    pm.sendRequest(postRequestCifrarDatosLogin,  function (err, response) {\r",
+									"        if (err) {\r",
+									"                console.log(\"Error en cifrado\")\r",
+									"        } else {\r",
+									"            console.log(\"Cifrado OK\")\r",
+									"            let responseBody = JSON.parse(response.text()); \r",
+									"            pm.environment.set(\"encrypt_identidad\", responseBody.identidad);\r",
+									"        }\r",
+									"    })\r",
+									"                "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identidad\": {\r\n        \"curp\": \"AETO900621HCCKZM04\",\r\n        \"nombre_completo\": \"OMAR JESUS AKE TUZ\",\r\n        \"fecha_nacimiento\": \"21/06/1990\",\r\n        \"cic\": \"183542152\",\r\n        \"numero_ocr\": \"0153081249788\",\r\n        \"pais_nacimiento\": \"Mexico\",\r\n        \"entidad_federativa\": \"Campeche\",\r\n        \"id_estado\": \"04\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://servicios-datos-dev.bancodonde.com/catFedConfig/a48f1672-6921-4e8a-9383-3a6b55b2767b?where={\"dCodigo\":\"97143\"}",
+							"protocol": "https",
+							"host": [
+								"servicios-datos-dev",
+								"bancodonde",
+								"com"
+							],
+							"path": [
+								"catFedConfig",
+								"a48f1672-6921-4e8a-9383-3a6b55b2767b"
+							],
+							"query": [
+								{
+									"key": "where",
+									"value": "{\"dCodigo\":\"97143\"}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cifrado_FirmaDigital",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let body_Request  = pm.request.body.raw;\r",
+									"let url_base_encriptado = \"https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/venn\";\r",
+									"let id_secret = pm.variables.get(\"id_secret\");\r",
+									"let identidad= JSON.parse(body_Request)\r",
+									"\r",
+									"console.log(identidad);\r",
+									"\r",
+									"    const postRequestCifrarDatosLogin = {\r",
+									"        url:  url_base_encriptado + '/encriptar',\r",
+									"        method: 'POST',\r",
+									"        header: {\r",
+									"                'Content-Type': 'application/json',\r",
+									"                'X-Foo': 'bar'\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify({ \r",
+									"                identidad: JSON.stringify(identidad),   \r",
+									"                id_secret : id_secret                     \r",
+									"            })\r",
+									"        } \r",
+									"    };\r",
+									"    console.log(JSON.stringify({ \r",
+									"                identidad: JSON.stringify(identidad),   \r",
+									"                id_secret : id_secret                     \r",
+									"            }));\r",
+									"    pm.sendRequest(postRequestCifrarDatosLogin,  function (err, response) {\r",
+									"        if (err) {\r",
+									"                console.log(\"Error en cifrado\")\r",
+									"        } else {\r",
+									"            console.log(\"Cifrado OK\")\r",
+									"            let responseBody = JSON.parse(response.text()); \r",
+									"            pm.environment.set(\"encrypt_firma\", responseBody.identidad);\r",
+									"        }\r",
+									"    })\r",
+									"                "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firmarDigital\": \"Hola\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://servicios-datos-dev.bancodonde.com/catFedConfig/a48f1672-6921-4e8a-9383-3a6b55b2767b?where={\"dCodigo\":\"97143\"}",
+							"protocol": "https",
+							"host": [
+								"servicios-datos-dev",
+								"bancodonde",
+								"com"
+							],
+							"path": [
+								"catFedConfig",
+								"a48f1672-6921-4e8a-9383-3a6b55b2767b"
+							],
+							"query": [
+								{
+									"key": "where",
+									"value": "{\"dCodigo\":\"97143\"}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Valida-RFC",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let body_Request  = pm.request.body.raw;\r",
+									"let url_base_encriptado = \"https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/venn\";\r",
+									"let id_secret = pm.variables.get(\"id_secret\");\r",
+									"let rfc= JSON.parse(body_Request).rfc\r",
+									"\r",
+									"\r",
+									"    const postRequestCifrarDatosLogin = {\r",
+									"        url:  url_base_encriptado + '/encriptar',\r",
+									"        method: 'POST',\r",
+									"        header: {\r",
+									"                'Content-Type': 'application/json',\r",
+									"                'X-Foo': 'bar'\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify({ \r",
+									"                rfc: rfc,   \r",
+									"                id_secret : id_secret                     \r",
+									"            })\r",
+									"        } \r",
+									"    };\r",
+									"    pm.sendRequest(postRequestCifrarDatosLogin,  function (err, response) {\r",
+									"        if (err) {\r",
+									"                console.log(\"Error en cifrado\")\r",
+									"        } else {\r",
+									"            console.log(\"Cifrado OK\")\r",
+									"            let responseBody = JSON.parse(response.text()); \r",
+									"            pm.environment.set(\"encrypt_rfc\", responseBody.rfc);\r",
+									"        }\r",
+									"    })\r",
+									"                "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"rfc\": \"AETO900621E72\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://servicios-datos-dev.bancodonde.com/catFedConfig/a48f1672-6921-4e8a-9383-3a6b55b2767b?where={\"dCodigo\":\"97143\"}",
+							"protocol": "https",
+							"host": [
+								"servicios-datos-dev",
+								"bancodonde",
+								"com"
+							],
+							"path": [
+								"catFedConfig",
+								"a48f1672-6921-4e8a-9383-3a6b55b2767b"
+							],
+							"query": [
+								{
+									"key": "where",
+									"value": "{\"dCodigo\":\"97143\"}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cifrado_Domicilio",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let body_Request  = pm.request.body.raw;\r",
+									"let url_base_encriptado = \"https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/venn\";\r",
+									"let id_secret = pm.variables.get(\"id_secret\");\r",
+									"let domicilio= JSON.parse(body_Request).domicilio\r",
+									"\r",
+									"const postRequestCifrarDatosLogin = {\r",
+									"    url:  url_base_encriptado + '/encriptar',\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"                'Content-Type': 'application/json',\r",
+									"                'X-Foo': 'bar'\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({ \r",
+									"            domicilio: JSON.stringify(domicilio),   \r",
+									"            id_secret : id_secret                     \r",
+									"        })\r",
+									"    } \r",
+									"};\r",
+									"pm.sendRequest(postRequestCifrarDatosLogin,  function (err, response) {\r",
+									"    if (err) {\r",
+									"        console.log(\"Error en cifrado\")\r",
+									"    } else {\r",
+									"        console.log(\"Cifrado OK\")\r",
+									"        let responseBody = JSON.parse(response.text()); \r",
+									"        pm.environment.set(\"encrypt_domicilio\", responseBody.domicilio);\r",
+									"    }\r",
+									"})\r",
+									"                "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"domicilio\": {\r\n        \"nombre_vialidad\": \"83 426\",\r\n        \"nombre_asentamiento\": \"FRACC LOS HEROES F\",\r\n        \"municipio_delegacion\": \"MERIDA\",\r\n        \"codigo_postal\": \"97000\",\r\n        \"entidad_federativa\": \"31\",\r\n        \"id_estado\": \"Yucatán\",\r\n        \"pais\": \"Mexico\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://servicios-datos-dev.bancodonde.com/catFedConfig/a48f1672-6921-4e8a-9383-3a6b55b2767b?where={\"dCodigo\":\"97143\"}",
+							"protocol": "https",
+							"host": [
+								"servicios-datos-dev",
+								"bancodonde",
+								"com"
+							],
+							"path": [
+								"catFedConfig",
+								"a48f1672-6921-4e8a-9383-3a6b55b2767b"
+							],
+							"query": [
+								{
+									"key": "where",
+									"value": "{\"dCodigo\":\"97143\"}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cifrado_AcercaDeTi",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let body_Request  = pm.request.body.raw;\r",
+									"let url_base_encriptado = \"https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/venn\";\r",
+									"let id_secret = pm.variables.get(\"id_secret\");\r",
+									"let preguntasRespuestas= JSON.parse(body_Request)\r",
+									"\r",
+									"const postRequestCifrarDatosLogin = {\r",
+									"    url:  url_base_encriptado + '/encriptar',\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"                'Content-Type': 'application/json',\r",
+									"                'X-Foo': 'bar'\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({ \r",
+									"            preguntasRespuestas: JSON.stringify(preguntasRespuestas),   \r",
+									"            id_secret : id_secret                     \r",
+									"        })\r",
+									"    } \r",
+									"};\r",
+									"pm.sendRequest(postRequestCifrarDatosLogin,  function (err, response) {\r",
+									"    if (err) {\r",
+									"        console.log(\"Error en cifrado\")\r",
+									"    } else {\r",
+									"        console.log(\"Cifrado OK\")\r",
+									"        let responseBody = JSON.parse(response.text()); \r",
+									"        pm.environment.set(\"encrypt_preguntasRespuestas\", responseBody.preguntasRespuestas);\r",
+									"    }\r",
+									"})\r",
+									"                "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fiscal\": {\r\n        \"RFC\": \"AETO900621E72\",\r\n        \"eFirma\": \"00101010102003002\"\r\n    },\r\n    \"preguntas\": {\r\n        \"OrigenRecursos\": 1,\r\n        \"DestinoRecursos\": 2,\r\n        \"Profesion\": 6,\r\n        \"MovimientosMensuales\": 7,\r\n        \"MontoMensual\": 8,\r\n        \"RelacionesPoliticas\": {\r\n            \"SoyYo\": 0,\r\n            \"EsFamiliar\": {\r\n                \"NombreTitular\": \"Jesus Alejandro Ake Tuz\",\r\n                \"Parentesco\": 5,\r\n                \"PuestoDesempeniado\": \"Funcionario publico\"\r\n            }\r\n        }\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://servicios-datos-dev.bancodonde.com/catFedConfig/a48f1672-6921-4e8a-9383-3a6b55b2767b?where={\"dCodigo\":\"97143\"}",
+							"protocol": "https",
+							"host": [
+								"servicios-datos-dev",
+								"bancodonde",
+								"com"
+							],
+							"path": [
+								"catFedConfig",
+								"a48f1672-6921-4e8a-9383-3a6b55b2767b"
+							],
+							"query": [
+								{
+									"key": "where",
+									"value": "{\"dCodigo\":\"97143\"}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Decifrar_Consulta_ocr",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"resultado\": \"{{Cifrado_Consulta_OCR}}\",\r\n\"id_secret\" : \"{{id_secret}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/venn/decriptar",
+							"protocol": "https",
+							"host": [
+								"87hqu9c2gk",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"banco",
+								"v1",
+								"venn",
+								"decriptar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Decifra_Consulta_solicitud",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"Cifrado_Token_incode\": \"{{Cifrado_Token_incode}}\",\r\n\"Cifrado_rfc\": \"{{Cifrado_rfc}}\",\r\n\"Cifrado_curp\": \"{{Cifrado_curp}}\",\r\n\"Cifrado_data_declaratoria\":\"{{Cifrado_data_declaratoria}}\",\r\n\"Cifrado_data_ine\":\"{{Cifrado_data_ine}}\",\r\n\"Cifrado_data_domicilio\":\"{{Cifrado_data_domicilio}}\",\r\n\"Cifrado_data_acercaDeTi\":\"{{Cifrado_data_acercaDeTi}}\",\r\n\"id_secret\" : \"{{id_secret}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/venn/decriptar",
+							"protocol": "https",
+							"host": [
+								"87hqu9c2gk",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"banco",
+								"v1",
+								"venn",
+								"decriptar"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "01_Login Automático",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//Datos de usuario",
+							"let telefono_plano = \"9961101573\";",
+							"let password_plano =  \"Mexico2025!\";",
+							"let movil_id_plano = \"dd6856cc437a4925\";",
+							"",
+							"//Datos API",
+							"let api_key =  \"quCbiNtTM89N3uQq8tEU1622ohh9fsSw2QrRPzOa\";",
+							"let base_url =  \"https://api-svc-venn.tribal-dev.dondebanco.com/banco/v1/VennBanco\";",
+							"",
+							"let url_base_encriptado = \"https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/venn\";",
+							"",
+							"pm.environment.get(\"variable_key\");",
+							"",
+							"//intercambio_publico",
+							"console.log(\"Intercambio parcial\")",
+							"const postRequestIntercambioPublico = {",
+							"  url:  base_url + '/intercambio/publico',",
+							"  method: 'POST',",
+							"  header: {",
+							"    'Content-Type': 'application/json',",
+							"    'X-Foo': 'bar', ",
+							"    'X-API-Key' : api_key",
+							"  },",
+							"  body: {",
+							"    mode: 'raw',",
+							"    raw: JSON.stringify({ ",
+							"            llave_publica: \"151\"})",
+							"    } ",
+							"};",
+							"pm.sendRequest(postRequestIntercambioPublico,  function (err, response) {",
+							"    if (err) {",
+							"        console.log(\"Error en intercambio publico\")",
+							"    } else {",
+							"        console.log(\"Intercambio publico OK\")",
+							"        // intercambio publico de llaves ",
+							"        responseBody =  JSON.parse(response.text());",
+							"        pm.environment.set(\"id_secret\", responseBody.resultado.id);",
+							"        pm.environment.set(\"llave_publica\", responseBody.resultado.public);",
+							"",
+							"        let id_secret = pm.variables.get(\"id_secret\");",
+							"",
+							"        //intercambio parcial de llaves {{base_url}}/intercambio apikey ",
+							"        console.log(\"Intercambio parcial\")",
+							"        const postRequestIntercambioParcial = {",
+							"        url:  base_url + '/intercambio',",
+							"        method: 'POST',",
+							"        header: {",
+							"            'Content-Type': 'application/json',",
+							"            'X-Foo': 'bar', ",
+							"            'X-API-Key' : api_key",
+							"        },",
+							"        body: {",
+							"            mode: 'raw',",
+							"            raw: JSON.stringify({ ",
+							"                    id: id_secret, ",
+							"                    llave_parcial : \"426\"",
+							"                    })",
+							"            } ",
+							"        };",
+							"        pm.sendRequest(postRequestIntercambioParcial,  function (err, response) {",
+							"            if (err) {",
+							"                console.log(\"Error en intercambio parcial\")",
+							"            } else {",
+							"                console.log(\"Cifrar de información de login\")",
+							"                const postRequestCifrarDatosLogin = {",
+							"                    url:  url_base_encriptado + '/encriptar',",
+							"                    method: 'POST',",
+							"                    header: {",
+							"                        'Content-Type': 'application/json',",
+							"                        'X-Foo': 'bar'},",
+							"                    body: {",
+							"                        mode: 'raw',",
+							"                        raw: JSON.stringify({ ",
+							"                                telefono: telefono_plano,",
+							"                                password:  password_plano,",
+							"                                movil_id :movil_id_plano,",
+							"                                id_secret : id_secret",
+							"                                })",
+							"                        } ",
+							"                    };",
+							"                pm.sendRequest(postRequestCifrarDatosLogin,  function (err, response) {",
+							"                    if (err) {",
+							"                        console.log(\"Error en cifrado de login\")",
+							"                    } else {",
+							"                        console.log(\"Cifrado Login OK\")",
+							"                        let responseBody = JSON.parse(response.text()); ",
+							"                        pm.environment.set(\"login_encrypt_telefono\", responseBody.telefono);",
+							"                        pm.environment.set(\"login_encryt_password\", responseBody.password);",
+							"                        pm.environment.set(\"login_encrypt_movil_id\", responseBody.movil_id);",
+							"                        //Hacer login con información cifrada",
+							"",
+							"                        const postRequestLogin = {",
+							"                            url:  base_url + '/login',",
+							"                            method: 'POST',",
+							"                            header: {",
+							"                                'Content-Type': 'application/json',",
+							"                                'X-Foo': 'bar', ",
+							"                                'X-API-Key' : api_key},",
+							"                            body: {",
+							"                                mode: 'raw',",
+							"                                raw: JSON.stringify({ ",
+							"                                    password: pm.variables.get(\"login_encryt_password\"),",
+							"                                    telefono: pm.variables.get(\"login_encrypt_telefono\"),",
+							"                                    movil_id : pm.variables.get(\"login_encrypt_movil_id\"),",
+							"                                    latitud: \"20.12131\",",
+							"                                    longitud: \"-89.1231\",",
+							"                                    id_secret : id_secret",
+							"                                    })",
+							"                                } ",
+							"                            };",
+							"                        pm.sendRequest(postRequestLogin,  function (err, response) {",
+							"                        if (err) {",
+							"                            console.log(\"Error al hacer login\")",
+							"                        } else {",
+							"                            console.log(\"Login OK\")",
+							"                            let responseBody = JSON.parse(response.text()); ",
+							"                            console.log(response.text())",
+							"                            pm.environment.set(\"encrypten_token\",responseBody.resultado.access_token );",
+							"                            pm.environment.set(\"id_usuario\", responseBody.resultado.id_usuario);",
+							"                            pm.environment.set(\"encrypted_public_key\", responseBody.resultado.public_key);",
+							"                            pm.environment.set(\"encrypted_telefono_login\", responseBody.resultado.telefono);",
+							"                            pm.environment.set(\"encrypted_correo_login\", responseBody.resultado.correo);",
+							"                        ",
+							"                            const postRequestDecifrarTokenLogin = {",
+							"                            url: 'https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/VennBanco/decriptar',",
+							"                            method: 'POST',",
+							"                            header: {",
+							"                                'Content-Type': 'application/json',",
+							"                                'X-Foo': 'bar'},",
+							"                                body: {",
+							"                                    mode: 'raw',",
+							"                                    raw: JSON.stringify(",
+							"                                    {",
+							"                                        token: responseBody.resultado.access_token,",
+							"                                        id_secret : id_secret",
+							"                                    }",
+							"                                    )",
+							"                                } ",
+							"                            };",
+							"                            pm.sendRequest(postRequestDecifrarTokenLogin,  function (err, response) {",
+							"                            if (err) {",
+							"                                console.log(\"Error en decifrado de login\")",
+							"                            } else {",
+							"                                console.log(esponse.text())",
+							"                                let responseBodyDecifrado = JSON.parse(response.text()); ",
+							"                                pm.environment.set(\"Authorization\", responseBodyDecifrado.token);",
+							"                                pm.environment.set(\"TOKEN\", responseBodyDecifrado.token);",
+							"                            }}); ",
+							"                            }",
+							"                        });",
+							"                    }});",
+							"            }});",
+							"    }});",
+							"                "
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();",
+							"pm.environment.set(\"Authorization\", response.token);",
+							"pm.environment.set(\"TOKEN\", response.token);",
+							"console.log('OK');"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJraWQiOiJQODFwQzY1dlNXdUFRRjVTdE1ZeWJsMDVmQlNRbitybGp5blhhSDl2RGU4PSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI2NmExM2YxYi1mMDQwLTRhMzctYWU3Ni02Njk5ODgwYTFkNjgiLCJldmVudF9pZCI6IjdiNDhkNWE3LTg4YTMtNDY4ZS1iYjdhLTdmZjlkN2RjZWNhMyIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE3MzkyMjg4NDcsImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9uYXdzLmNvbVwvdXMtZWFzdC0xX1lsZ3NZQVpUSCIsImV4cCI6MTczOTIzMjQ0NywiaWF0IjoxNzM5MjI4ODQ3LCJqdGkiOiI4NTYwMjJlZC1iMTZhLTRlNjgtYjRlMi04OWRhNWM2NDZlZDciLCJjbGllbnRfaWQiOiI0cGVlMWtjbWpobTQxYWRrbzFvZGdodGd2OCIsInVzZXJuYW1lIjoiODhjYmQxNjZmNmIzMDAyNTNmZmVhOTEzNDdiZmI2ODcifQ.DpryCbN6FSBRFmkfH-s6WzNiDcfhnqBVsNZVo1KnTExOQ1pVBSoyKF1roKRVrTAalDtEctf9-jcVviAqYVXK9FMYFOCrUzjJK3ApFF6A_p_WLi9tmKugA7rp5daO59kWrqTM9R8k9C6IDJPNjKnnaULBMUO1k23L1EiXhd88LgvFG-sufKb6HTzhk9amnV0crtekVS5AyGQTXI8p5F3uTKAOESydd_1NP-z9uOmmNwjF2M3AzQxqnajCt4uMOVpbrLqiImeyZazPALN1dlfd1XJLpq-3bg2OczUUcJp_lneoc6WtnjFfs1eB6vCyIWoBrCYBW269cWxAtXZeiorc3g",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{api_key}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"token\": \"{{encrypten_token}}\",\n\"public_key\" :\"{{encrypted_public_key}}\",\n\"telefono\" : \"{{encrypted_telefono_login}}\",\n\"correo\" : \"{{encrypted_correo_login}}\",\n\"id_secret\" : \"{{id_secret}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/venn/decriptar?aaaa=aaa",
+					"protocol": "https",
+					"host": [
+						"87hqu9c2gk",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"banco",
+						"v1",
+						"venn",
+						"decriptar"
+					],
+					"query": [
+						{
+							"key": "aaaa",
+							"value": "aaa",
+							"description": "aaaa"
+						},
+						{
+							"key": "aaa",
+							"value": "aaa",
+							"description": "a",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "02_InfoCliente",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();",
+							"pm.environment.set(\"cliente_info_clabe\", response.resultado.clabe);",
+							"pm.environment.set(\"cliente_info_correo\", response.resultado.correo_electronico);",
+							"pm.environment.set(\"cliente_info_telefono\", response.resultado.telefono_numero);",
+							"pm.environment.set(\"cliente_id_solicitud\", response.resultado?.upgrade.id_solicitud);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/banco/v1/VennBanco/cliente/info",
+					"protocol": "https",
+					"host": [
+						"api-svc-venn",
+						"tribal-dev",
+						"dondebanco",
+						"com"
+					],
+					"path": [
+						"banco",
+						"v1",
+						"VennBanco",
+						"cliente",
+						"info"
+					]
+				},
+				"description": "Obtiene informacion del usuario "
+			},
+			"response": []
+		},
+		{
+			"name": "05_CrearSolicitud",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.environment.set(\"cliente_id_solicitud\", response.resultado?.solicitudId);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"solicitudId\": \"{{$randomUUID}}\",\n    \"otp\": \"0000000\",\n    \"aceptaTerminos\": true,\n    \"aceptaDeclarativa\": true,\n    \"confirmaBeneficiarios\": true,\n    \"dispositivo\": {\n        \"id\": \"1234567890abcdef\",\n        \"modelo\": \"Android\",\n        \"marca\": \"Samsung\"\n    },\n    \"ubicacion\": {\n        \"latitud\": \"20.9838849\",\n        \"longitud\": \"-89.619715\"\n    },\n    \"canal\": \"remoto\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/upgrade/v1/VennBanco/upgrade/solicitudes",
+					"protocol": "https",
+					"host": [
+						"api-svc-venn",
+						"tribal-dev",
+						"dondebanco",
+						"com"
+					],
+					"path": [
+						"upgrade",
+						"v1",
+						"VennBanco",
+						"upgrade",
+						"solicitudes"
+					]
+				},
+				"description": "Obtiene informacion del usuario "
+			},
+			"response": []
+		},
+		{
+			"name": "06_Consulta de Catalogo - minsait",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/upgrade/v1/VennBanco/upgrade/cuestionarios/catalogo",
+					"protocol": "https",
+					"host": [
+						"api-svc-venn",
+						"tribal-dev",
+						"dondebanco",
+						"com"
+					],
+					"path": [
+						"upgrade",
+						"v1",
+						"VennBanco",
+						"upgrade",
+						"cuestionarios",
+						"catalogo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "06_Consulta de Pais - minsait",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/upgrade/v1/VennBanco/upgrade/paises",
+					"protocol": "https",
+					"host": [
+						"api-svc-venn",
+						"tribal-dev",
+						"dondebanco",
+						"com"
+					],
+					"path": [
+						"upgrade",
+						"v1",
+						"VennBanco",
+						"upgrade",
+						"paises"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "06_Consulta de Parentesco - minsait",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/banco/v1/VennBanco/catalogos/parentesco",
+					"protocol": "https",
+					"host": [
+						"api-svc-venn",
+						"tribal-dev",
+						"dondebanco",
+						"com"
+					],
+					"path": [
+						"banco",
+						"v1",
+						"VennBanco",
+						"catalogos",
+						"parentesco"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "07_Consulta de solicitud - minsait",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();\r",
+							"\r",
+							"console.log(response.resultado);\r",
+							"pm.environment.set(\"Cifrado_Token_incode\", response.resultado.token);\r",
+							"pm.environment.set(\"Cifrado_rfc\", response.resultado.datos_cliente.rfc);\r",
+							"pm.environment.set(\"Cifrado_curp\", response.resultado.datos_cliente.curp);\r",
+							"pm.environment.set(\"Cifrado_data_declaratoria\", response.resultado.proceso.declaratoria.data);\r",
+							"pm.environment.set(\"Cifrado_data_ine\", response.resultado.proceso.ine.data);\r",
+							"pm.environment.set(\"Cifrado_data_domicilio\", response.resultado.proceso.domicilio.data);\r",
+							"pm.environment.set(\"Cifrado_data_acercaDeTi\", response.resultado.proceso.acercaDeTi.data);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/upgrade/v1/VennBanco/upgrade/solicitudes/{{cliente_id_solicitud}}",
+					"protocol": "https",
+					"host": [
+						"api-svc-venn",
+						"tribal-dev",
+						"dondebanco",
+						"com"
+					],
+					"path": [
+						"upgrade",
+						"v1",
+						"VennBanco",
+						"upgrade",
+						"solicitudes",
+						"{{cliente_id_solicitud}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "08.1_MOD-INE/DOMI-Consulta OCR",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();\r",
+							"\r",
+							"console.log(response.resultado);\r",
+							"pm.environment.set(\"Cifrado_Consulta_OCR\", response.resultado);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n    \"solicitudId\": \"{{cliente_id_solicitud}}\",\r\n    \"dispositivo\": {\r\n        \"id\":\"3343j4jk4\",\r\n        \"marca\": \"xiaomi\",\r\n        \"modelo\": \"Android\"\r\n    },\r\n    \"ubicacion\": {\r\n        \"latitud\": \"19.00192\",\r\n        \"longitud\": \"-89.8190\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/upgrade/v1/VennBanco/upgrade/onboarding/ocr",
+					"protocol": "https",
+					"host": [
+						"api-svc-venn",
+						"tribal-dev",
+						"dondebanco",
+						"com"
+					],
+					"path": [
+						"upgrade",
+						"v1",
+						"VennBanco",
+						"upgrade",
+						"onboarding",
+						"ocr"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "404.No existe información",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"solicitudId\": \"{{cliente_id_solicitud}}\",\r\n    \"dispositivo\": {\r\n        \"id\":\"3343j4jk4\",\r\n        \"marca\": \"xiaomi\",\r\n        \"modelo\": \"Android\"\r\n    },\r\n    \"ubicacion\": {\r\n        \"latitud\": \"19.00192\",\r\n        \"longitud\": \"-89.8190\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/upgrade/v1/VennBanco/upgrade/onboarding/ocr",
+							"protocol": "https",
+							"host": [
+								"api-svc-venn",
+								"tribal-dev",
+								"dondebanco",
+								"com"
+							],
+							"path": [
+								"upgrade",
+								"v1",
+								"VennBanco",
+								"upgrade",
+								"onboarding",
+								"ocr"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"codigo\": \"001\",\n    \"errors\": [],\n    \"mensaje\": \"No existe información\",\n    \"resultado\": {}\n}"
+				},
+				{
+					"name": "400.Error Interno",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"solicitudId\": \"{{cliente_id_solicitud}}\",\r\n    \"dispositivo\": {\r\n        \"id\":\"3343j4jk4\",\r\n        \"marca\": \"xiaomi\",\r\n        \"modelo\": \"Android\"\r\n    },\r\n    \"ubicacion\": {\r\n        \"latitud\": \"19.00192\",\r\n        \"longitud\": \"-89.8190\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/upgrade/v1/VennBanco/upgrade/onboarding/ocr",
+							"protocol": "https",
+							"host": [
+								"api-svc-venn",
+								"tribal-dev",
+								"dondebanco",
+								"com"
+							],
+							"path": [
+								"upgrade",
+								"v1",
+								"VennBanco",
+								"upgrade",
+								"onboarding",
+								"ocr"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"codigo\": \"006\",\n    \"errors\": [],\n    \"mensaje\": \"Error al consumir API\",\n    \"resultado\": {}\n}"
+				},
+				{
+					"name": "200. Exito Cifrado",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"solicitudId\": \"{{cliente_id_solicitud}}\",\r\n    \"dispositivo\": {\r\n        \"id\":\"3343j4jk4\",\r\n        \"marca\": \"xiaomi\",\r\n        \"modelo\": \"Android\"\r\n    },\r\n    \"ubicacion\": {\r\n        \"latitud\": \"19.00192\",\r\n        \"longitud\": \"-89.8190\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/upgrade/v1/VennBanco/upgrade/onboarding/ocr",
+							"protocol": "https",
+							"host": [
+								"api-svc-venn",
+								"tribal-dev",
+								"dondebanco",
+								"com"
+							],
+							"path": [
+								"upgrade",
+								"v1",
+								"VennBanco",
+								"upgrade",
+								"onboarding",
+								"ocr"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"codigo\": \"000\",\n    \"errors\": [],\n    \"mensaje\": \"Operación exitosa\",\n    \"resultado\": \"yNOpOAky2/hoLWEHQTOxKyuWwJH91ElWNl1JwOp/MakefFPd3PpX/+4lAR/w+0H0QJa+GRG0pIpglKp014x9zbaZ0L+cMkuTCsckL85q+OPwr8Zv96VwSpGFT9dpp1TDAYtZpM43wuY+icGGz5tIZty9/Gk0ahIT93Ng0oCmIDFmDANmy57VGkJyO2UWywoSrQJwd0rojxgOJlGQz2lftEitKvcxRP6pbJqd+Mb9QXyNHtsXSk3MBW6AX7198Q6kAM50wFWfd9aNbeN9xJns8W2HQ08dSgin+DdS81benfxJ6FOlUNGVD+Xo7tWAuPsBSNbeM/8b3qAVyWrxtbWuQ7BwxjfHvJDRhedF9PIMQL4tBy4zCUJUnJPodCVQ/gBdwdhnfS820IObKg6qL9WgdqPsWtRwnF4Nbel1S97jgEmQVo4rHxQ1/v5TelMzhxwWGQdF9XLrC0+/CjYgkP/0aKJT46FyYCot461ZRr2qKG/C90clhL/0ot6eIETl9xVPSE0mqSx6M0+QPaWS4p0jQ47qLNK0fW8jFoITkn0ZSb4f97AxlZdqH2nB4FQ8kc6TIraM3fGpWpah5SOSsxp4u3Oqz2yYQ2EXhhbTbRX8iHdMOU0DpN3v8Fkbjm/CJvjjH2YNICUL15mn6HUmPWDEv6wqtKmAXEXNaB52Y5aj3lepW2i8z+fUpaFAGVTlV8rdlKrCsqjnynKZg5nuFBCrNA==\"\n}"
+				},
+				{
+					"name": "200. Exito Decifrado (solo INE)",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"solicitudId\": \"{{cliente_id_solicitud}}\",\r\n    \"dispositivo\": {\r\n        \"id\":\"3343j4jk4\",\r\n        \"marca\": \"xiaomi\",\r\n        \"modelo\": \"Android\"\r\n    },\r\n    \"ubicacion\": {\r\n        \"latitud\": \"19.00192\",\r\n        \"longitud\": \"-89.8190\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/upgrade/v1/VennBanco/upgrade/onboarding/ocr",
+							"protocol": "https",
+							"host": [
+								"api-svc-venn",
+								"tribal-dev",
+								"dondebanco",
+								"com"
+							],
+							"path": [
+								"upgrade",
+								"v1",
+								"VennBanco",
+								"upgrade",
+								"onboarding",
+								"ocr"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"codigo\": \"000\",\n    \"errors\": [],\n    \"mensaje\": \"Operación exitosa\",\n    \"resultado\": {\n        \"solicitudId\": \"c6590d4a-e79b-414b-acc1-9fd6c1a2cff5\",\n        \"domicilio\": {\n            \"nombre_vialidad\": \"C 23 NUM 74\",\n            \"nombre_asentamiento\": \"BARR SAN MIGUEL KUCAB\",\n            \"municipio_delegacion\": \"CALKINI\",\n            \"codigo_postal\": \"24903\",\n            \"entidad_federativa\": \"04\",\n            \"id_estado\": \"Campeche\",\n            \"estado_documento\": \"VIGENTE\",\n            \"pais\": \"Mexico\"\n        },\n        \"identidad\": {\n            \"curp\": \"AETO900621HCCKZM04\",\n            \"nombre_completo\": \"OMAR JESUS AKE TUZ\",\n            \"fecha_nacimiento\": \"21/06/1990\",\n            \"cic\": \"183542152\",\n            \"numero_ocr\": \"0153081249788\",\n            \"pais_nacimiento\": \"Mexico\",\n            \"entidad_federativa\": \"Campeche\",\n            \"id_estado\": \"04\",\n            \"cve_nacionalidad\": 1\n        }\n    }\n}"
+				},
+				{
+					"name": "200. Exito Decifrado (INE/COMPROBANTE)",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"solicitudId\": \"{{cliente_id_solicitud}}\",\r\n    \"dispositivo\": {\r\n        \"id\":\"3343j4jk4\",\r\n        \"marca\": \"xiaomi\",\r\n        \"modelo\": \"Android\"\r\n    },\r\n    \"ubicacion\": {\r\n        \"latitud\": \"19.00192\",\r\n        \"longitud\": \"-89.8190\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/upgrade/v1/VennBanco/upgrade/onboarding/ocr",
+							"protocol": "https",
+							"host": [
+								"api-svc-venn",
+								"tribal-dev",
+								"dondebanco",
+								"com"
+							],
+							"path": [
+								"upgrade",
+								"v1",
+								"VennBanco",
+								"upgrade",
+								"onboarding",
+								"ocr"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n\t\"codigo\": \"000\",\n\t\"errors\": [],\n\t\"mensaje\": \"Operación exitosa\",\n\t\"resultado\": {\n\t\t\"solicitudId\": \"97e88a68-f4ba-41e9-adc5-0aeacd676286\",\n\t\t\"domicilio\": {\n\t\t\t\"nombre_vialidad\": \"83 426\",\n\t\t\t\"nombre_asentamiento\": \"FRACC LOS HEROES F\",\n\t\t\t\"municipio_delegacion\": \"MERIDA\",\n\t\t\t\"codigo_postal\": \"97000\",\n\t\t\t\"entidad_federativa\": \"31\",\n\t\t\t\"id_estado\": \"Yucatán\",\n\t\t\t\"estado_documento\": \"VIGENTE\",\n\t\t\t\"pais\": \"Mexico\"\n\t\t},\n\t\t\"identidad\": {\n\t\t\t\"curp\": \"AETO900621HCCKZM04\",\n\t\t\t\"nombre_completo\": \"OMAR JESUS AKE TUZ\",\n\t\t\t\"fecha_nacimiento\": \"21/06/1990\",\n\t\t\t\"cic\": \"183542152\",\n\t\t\t\"numero_ocr\": \"0153081249788\",\n\t\t\t\"pais_nacimiento\": \"MEX\",\n\t\t\t\"entidad_federativa\": \"Campeche\",\n\t\t\t\"id_estado\": \"04\",\n\t\t\t\"cve_nacionalidad\": 1\n\t\t}\n\t}\n}"
+				}
+			]
+		},
+		{
+			"name": "08.2_MOD-INE-Validacion-gubernamental",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"solicitudId\": \"{{cliente_id_solicitud}}\",\r\n    \"ubicacion\": {\r\n        \"latitud\": \"20.6931026\",\r\n        \"longitud\": \"-103.3765498\"\r\n    },\r\n    \"dispositivo\": {\r\n        \"id\": \"51111151511\",\r\n        \"marca\": \"IPHONE\",\r\n        \"modelo\": \"iOS\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/upgrade/v1/VennBanco/upgrade/onboarding/validacion-gubernamental",
+					"protocol": "https",
+					"host": [
+						"api-svc-venn",
+						"tribal-dev",
+						"dondebanco",
+						"com"
+					],
+					"path": [
+						"upgrade",
+						"v1",
+						"VennBanco",
+						"upgrade",
+						"onboarding",
+						"validacion-gubernamental"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Respuesta exitosa",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"solicitudId\": \"{{cliente_id_solicitud}}\",\r\n    \"ubicacion\": {\r\n        \"latitud\": \"20.6931026\",\r\n        \"longitud\": \"-103.3765498\"\r\n    },\r\n    \"dispositivo\": {\r\n        \"id\": \"51111151511\",\r\n        \"marca\": \"IPHONE\",\r\n        \"modelo\": \"iOS\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/upgrade/v1/VennBanco/upgrade/onboarding/validacion-gubernamental",
+							"protocol": "https",
+							"host": [
+								"api-svc-venn",
+								"tribal-dev",
+								"dondebanco",
+								"com"
+							],
+							"path": [
+								"upgrade",
+								"v1",
+								"VennBanco",
+								"upgrade",
+								"onboarding",
+								"validacion-gubernamental"
+							]
+						}
+					},
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "08.3_MOD-INE-Cliente Obtener Puntuaciones",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n    \"solicitudId\": \"{{cliente_id_solicitud}}\",\r\n    \"dispositivo\": {\r\n        \"id\":\"3343j4jk4\",\r\n        \"marca\": \"xiaomi\",\r\n        \"modelo\": \"Android\"\r\n    },\r\n    \"ubicacion\": {\r\n        \"latitud\": \"19.00192\",\r\n        \"longitud\": \"-89.8190\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/upgrade/v1/VennBanco/upgrade/onboarding/puntuaciones",
+					"protocol": "https",
+					"host": [
+						"api-svc-venn",
+						"tribal-dev",
+						"dondebanco",
+						"com"
+					],
+					"path": [
+						"upgrade",
+						"v1",
+						"VennBanco",
+						"upgrade",
+						"onboarding",
+						"puntuaciones"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "08.4_MOD-INE-Cliente Ine",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let body_Request  = pm.request.body.raw;\r",
+							"\r",
+							"console.log(body_Request);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"solicitudId\": \"{{cliente_id_solicitud}}\",\r\n    \"estatus\": \"FINALIZADO\",\r\n    \"identidad\": \"{{encrypt_identidad}}\",\r\n    \"dispositivo\": {\r\n        \"id\": \"3343j4jk4\",\r\n        \"marca\": \"xiaomi\",\r\n        \"modelo\": \"Android\"\r\n    },\r\n    \"ubicacion\": {\r\n        \"latitud\": \"19.00192\",\r\n        \"longitud\": \"-89.8190\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/upgrade/v1/VennBanco/upgrade/clientes/ine",
+					"protocol": "https",
+					"host": [
+						"api-svc-venn",
+						"tribal-dev",
+						"dondebanco",
+						"com"
+					],
+					"path": [
+						"upgrade",
+						"v1",
+						"VennBanco",
+						"upgrade",
+						"clientes",
+						"ine"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "09_MOD-DOMI-Cliente Domicilio",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"solicitudId\": \"{{cliente_id_solicitud}}\",\r\n    \"estatus\": \"FINALIZADO\",\r\n    \"domicilio\": \"{{encrypt_domicilio}}\",\r\n    \"dispositivo\": {\r\n        \"id\": \"3343j4jk4\",\r\n        \"marca\": \"xiaomi\",\r\n        \"modelo\": \"Android\"\r\n    },\r\n    \"ubicacion\": {\r\n        \"latitud\": \"19.00192\",\r\n        \"longitud\": \"-89.8190\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/upgrade/v1/VennBanco/upgrade/clientes/domicilio",
+					"protocol": "https",
+					"host": [
+						"api-svc-venn",
+						"tribal-dev",
+						"dondebanco",
+						"com"
+					],
+					"path": [
+						"upgrade",
+						"v1",
+						"VennBanco",
+						"upgrade",
+						"clientes",
+						"domicilio"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "10.1_MOd-Acerca de ti-ValidaRFC",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"rfc\": \"{{encrypt_rfc}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/banco/v1/VennBanco/cliente/rfc/validar",
+					"protocol": "https",
+					"host": [
+						"api-svc-venn",
+						"tribal-dev",
+						"dondebanco",
+						"com"
+					],
+					"path": [
+						"banco",
+						"v1",
+						"VennBanco",
+						"cliente",
+						"rfc",
+						"validar"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "200. Respuesta exitosa",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"rfc\": \"{{encrypt_rfc}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/upgrade/v1/VennBanco/upgrade/clientes/acerca-de-ti",
+							"protocol": "https",
+							"host": [
+								"api-svc-venn",
+								"tribal-dev",
+								"dondebanco",
+								"com"
+							],
+							"path": [
+								"upgrade",
+								"v1",
+								"VennBanco",
+								"upgrade",
+								"clientes",
+								"acerca-de-ti"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"codigo\": \"000\",\n    \"errors\": [],\n    \"mensaje\": \"Operación exitosa\",\n    \"resultado\": {\n        \"rfcValido\": true,\n        \"rfcDisponible\": false\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "10.2_MOd-Acerca de ti",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"solicitudId\": \"{{cliente_id_solicitud}}\",\r\n    \"estatus\": \"FINALIZADO\",\r\n    \"data\": \"{{encrypt_preguntasRespuestas}}\",\r\n    \"dispositivo\": {\r\n        \"id\": \"3343j4jk4\",\r\n        \"marca\": \"xiaomi\",\r\n        \"modelo\": \"Android\"\r\n    },\r\n    \"ubicacion\": {\r\n        \"latitud\": \"19.00192\",\r\n        \"longitud\": \"-89.8190\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/upgrade/v1/VennBanco/upgrade/clientes/acerca-de-ti",
+					"protocol": "https",
+					"host": [
+						"api-svc-venn",
+						"tribal-dev",
+						"dondebanco",
+						"com"
+					],
+					"path": [
+						"upgrade",
+						"v1",
+						"VennBanco",
+						"upgrade",
+						"clientes",
+						"acerca-de-ti"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "400. Solicitud con id finalizado",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"solicitudId\": \"{{cliente_id_solicitud}}\",\r\n    \"estatus\": \"FINALIZADO\",\r\n    \"data\": \"{{encrypt_preguntasRespuestas}}\",\r\n    \"dispositivo\": {\r\n        \"id\": \"3343j4jk4\",\r\n        \"marca\": \"xiaomi\",\r\n        \"modelo\": \"Android\"\r\n    },\r\n    \"ubicacion\": {\r\n        \"latitud\": \"19.00192\",\r\n        \"longitud\": \"-89.8190\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/upgrade/v1/VennBanco/upgrade/clientes/acerca-de-ti",
+							"protocol": "https",
+							"host": [
+								"api-svc-venn",
+								"tribal-dev",
+								"dondebanco",
+								"com"
+							],
+							"path": [
+								"upgrade",
+								"v1",
+								"VennBanco",
+								"upgrade",
+								"clientes",
+								"acerca-de-ti"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"codigo\": \"012\",\r\n    \"errors\": [],\r\n    \"mensaje\": \"Error en actualizar, proceso FINALIZADO y/o RECHAZO con anterioridad\",\r\n    \"resultado\": {}\r\n}"
+				},
+				{
+					"name": "200. Respuesta exitosa",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"solicitudId\": \"{{cliente_id_solicitud}}\",\r\n    \"estatus\": \"FINALIZADO\",\r\n    \"data\": \"{{encrypt_preguntasRespuestas}}\",\r\n    \"dispositivo\": {\r\n        \"id\": \"3343j4jk4\",\r\n        \"marca\": \"xiaomi\",\r\n        \"modelo\": \"Android\"\r\n    },\r\n    \"ubicacion\": {\r\n        \"latitud\": \"19.00192\",\r\n        \"longitud\": \"-89.8190\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/upgrade/v1/VennBanco/upgrade/clientes/acerca-de-ti",
+							"protocol": "https",
+							"host": [
+								"api-svc-venn",
+								"tribal-dev",
+								"dondebanco",
+								"com"
+							],
+							"path": [
+								"upgrade",
+								"v1",
+								"VennBanco",
+								"upgrade",
+								"clientes",
+								"acerca-de-ti"
+							]
+						}
+					},
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "11_MOD-Firma",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"solicitudId\": \"{{cliente_id_solicitud}}\",\r\n    \"estatus\": \"FINALIZADO\",\r\n    \"data\": \"{{encrypt_firma}}\",\r\n    \"dispositivo\": {\r\n        \"id\": \"91876b80441b1f042f6f\",\r\n        \"marca\": \"xiaomi\",\r\n        \"modelo\": \"Android\"\r\n    },\r\n    \"ubicacion\": {\r\n        \"latitud\": \"19.00192\",\r\n        \"longitud\": \"-89.8190\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/upgrade/v1/VennBanco/upgrade/clientes/firma-digital",
+					"protocol": "https",
+					"host": [
+						"api-svc-venn",
+						"tribal-dev",
+						"dondebanco",
+						"com"
+					],
+					"path": [
+						"upgrade",
+						"v1",
+						"VennBanco",
+						"upgrade",
+						"clientes",
+						"firma-digital"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "12_Upgrade Cuenta",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();\r",
+							"\r",
+							"console.log(response.resultado);\r",
+							"pm.environment.set(\"Cifrado_Consulta_OCR\", response.resultado);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"solicitudId\": \"{{cliente_id_solicitud}}\",\r\n  \"estatus\": \"EN_PROCESO\",\r\n  \"ubicacion\": {\r\n    \"latitud\": \"20.6592698\",\r\n    \"longitud\": \"-88.8411185\"\r\n  },\r\n  \"dispositivo\": {\r\n    \"id\": \"1234567890abcdef\",\r\n    \"modelo\": \"Android\",\r\n    \"marca\": \"POCO\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-svc-venn.tribal-dev.dondebanco.com/upgrade/v1/VennBanco/upgrade/clientes/cuenta",
+					"protocol": "https",
+					"host": [
+						"api-svc-venn",
+						"tribal-dev",
+						"dondebanco",
+						"com"
+					],
+					"path": [
+						"upgrade",
+						"v1",
+						"VennBanco",
+						"upgrade",
+						"clientes",
+						"cuenta"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -7,6 +7,7 @@ import (
 
 	"github.com/charmbracelet/bubbles/list"
 	"gopkg.in/yaml.v2"
+	// "gopkg.in/yaml.v2"
 )
 
 type ListConfiguration struct {
@@ -33,7 +34,7 @@ func check(e error) {
 	}
 }
 
-func LoadConfig(lcfg *ListConfiguration) {
+func LoadConfigFolder(lcfg *ListConfiguration) {
 
 	folderName := "config"
 
