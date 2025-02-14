@@ -33,16 +33,14 @@ type Styles struct {
 	// HelpStyle       lipgloss.Style
 
 	// Styled characters.
-	// ActivePaginationDot   lipgloss.Style
-	// InactivePaginationDot lipgloss.Style
-	// ArabicPagination      lipgloss.Style
-	// DividerDot            lipgloss.Style
+	ActivePaginationDot   lipgloss.Style
+	InactivePaginationDot lipgloss.Style
 }
 
 // DefaultStyles returns a set of default style definitions for this list
 // component.
 func DefaultStyles() (s Styles) {
-	// verySubduedColor := lipgloss.AdaptiveColor{Light: "#DDDADA", Dark: "#3C3C3C"}
+	verySubduedColor := lipgloss.AdaptiveColor{Light: "#DDDADA", Dark: "#3C3C3C"}
 	// subduedColor := lipgloss.AdaptiveColor{Light: "#9B9B9B", Dark: "#5C5C5C"}
 
 	// s.TitleBar = lipgloss.NewStyle().Padding(0, 0, 1, 2) //nolint:mnd
@@ -83,13 +81,13 @@ func DefaultStyles() (s Styles) {
 
 	// s.HelpStyle = lipgloss.NewStyle().Padding(1, 0, 0, 2) //nolint:mnd
 
-	// s.ActivePaginationDot = lipgloss.NewStyle().
-	// 	Foreground(lipgloss.AdaptiveColor{Light: "#847A85", Dark: "#979797"}).
-	// 	SetString(bullet)
+	s.ActivePaginationDot = lipgloss.NewStyle().
+		Foreground(lipgloss.AdaptiveColor{Light: "#847A85", Dark: "#979797"}).
+		SetString(bullet)
 
-	// s.InactivePaginationDot = lipgloss.NewStyle().
-	// 	Foreground(verySubduedColor).
-	// 	SetString(bullet)
+	s.InactivePaginationDot = lipgloss.NewStyle().
+		Foreground(verySubduedColor).
+		SetString(bullet)
 
 	// s.DividerDot = lipgloss.NewStyle().
 	// 	Foreground(verySubduedColor).

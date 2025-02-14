@@ -7,31 +7,56 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/deriannavy/api-rest-client-cli/item"
+	"github.com/deriannavy/api-rest-client-cli/paginator"
 )
 
 type Model struct {
+	// Styles
 	Styles Styles
 
+	// Titles & text
 	itemNameSingular string
 	itemNamePlural   string
 
+	// Components
+	Paginator      paginator.Model
+	itemComplement item.ItemComplement
+
+	// Window Size
 	width  int
 	height int
 
-	items []item.Item
+	// Items & indexs
+	cursor int
+	items  []item.Item
 }
 
 func New(items []item.Item, width, height int) Model {
 
-	return Model{
+	s := DefaultStyles()
+
+	ic := item.NewComplement()
+
+	p := paginator.New()
+	p.ActiveDot = s.ActivePaginationDot.String()
+	p.InactiveDot = s.InactivePaginationDot.String()
+
+	m := Model{
 		Styles:           DefaultStyles(),
 		itemNameSingular: "item",
 		itemNamePlural:   "items",
+		itemComplement:   ic,
+		Paginator:        p,
+		width:            width,
+		height:           height,
 
-		width:  width,
-		height: height,
-		items:  items,
+		// > Lists
+		items: items,
 	}
+
+	m.updatePagination()
+
+	return m
 
 }
 
@@ -48,7 +73,7 @@ func (m Model) View() string {
 	var b strings.Builder
 
 	// Empty states
-	if len(items) == 0 {
+	if len(items) <= 0 {
 		return m.Styles.NoItems.Render("No " + m.itemNamePlural + ".")
 	}
 
@@ -63,10 +88,26 @@ func (m Model) View() string {
 	// 		}
 	// 	}
 	// }
-	fmt.Fprint(&b, strconv.Itoa(m.width))
-	fmt.Fprint(&b, strconv.Itoa(m.height))
+	// 	start, end := m.Paginator.GetSliceBounds(len(items))
+	// 	docs := items[start:end]
+
+	start, end := m.Paginator.GetSliceBounds(len(items))
+	docs := items[start:end]
+	docsT := items
+	fmt.Fprint(&b, "width: ", strconv.Itoa(m.width))
+	fmt.Fprint(&b, "\nheight: ", strconv.Itoa(m.height))
+	fmt.Fprint(&b, "\nitems: ", strconv.Itoa(len(docs)))
+	fmt.Fprint(&b, "\nitems totales: ", strconv.Itoa(len(docsT)))
 
 	return b.String()
+}
+
+// Index returns the index of the currently selected item as it is stored in the
+// filtered list of items.
+// Using this value with SetItem() might be incorrect, consider using
+// GlobalIndex() instead.
+func (m Model) Index() int {
+	return m.Paginator.Page*m.Paginator.PerPage + m.cursor
 }
 
 // SetSize sets the width and height of this component.
@@ -74,7 +115,32 @@ func (m *Model) SetSize(width, height int) {
 	m.setSize(width, height)
 }
 
+// > Set size private function
 func (m *Model) setSize(width, height int) {
 	m.width = width
 	m.height = height
+	m.updatePagination()
+}
+
+// Update pagination according to the amount of items for the current state.
+func (m *Model) updatePagination() {
+	index := m.Index()
+	availHeight := m.height
+
+	m.Paginator.PerPage = max(1, availHeight/m.itemComplement.TotalHeight())
+
+	if pages := len(m.items); pages < 1 {
+		m.Paginator.SetTotalPages(1)
+	} else {
+		m.Paginator.SetTotalPages(pages)
+	}
+
+	// Restore index
+	m.Paginator.Page = index / m.Paginator.PerPage
+	m.cursor = index % m.Paginator.PerPage
+
+	// Make sure the page stays in bounds
+	if m.Paginator.Page >= m.Paginator.TotalPages-1 {
+		m.Paginator.Page = max(0, m.Paginator.TotalPages-1)
+	}
 }
