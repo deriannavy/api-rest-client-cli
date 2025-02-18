@@ -77,27 +77,23 @@ func (m Model) View() string {
 		return m.Styles.NoItems.Render("No " + m.itemNamePlural + ".")
 	}
 
-	// if len(items) > 0 {
-	// 	start, end := m.Paginator.GetSliceBounds(len(items))
-	// 	docs := items[start:end]
+	if len(items) > 0 {
+		start, end := m.Paginator.GetSliceBounds(len(items))
+		docs := items[start:end]
 
-	// 	for i, item := range docs {
-	// 		m.delegate.Render(&b, m, i+start, item)
-	// 		if i != len(docs)-1 {
-	// 			fmt.Fprint(&b, strings.Repeat("\n", m.delegate.Spacing()+1))
-	// 		}
-	// 	}
-	// }
-	// 	start, end := m.Paginator.GetSliceBounds(len(items))
-	// 	docs := items[start:end]
-
-	start, end := m.Paginator.GetSliceBounds(len(items))
-	docs := items[start:end]
-	docsT := items
-	fmt.Fprint(&b, "width: ", strconv.Itoa(m.width))
-	fmt.Fprint(&b, "\nheight: ", strconv.Itoa(m.height))
-	fmt.Fprint(&b, "\nitems: ", strconv.Itoa(len(docs)))
-	fmt.Fprint(&b, "\nitems totales: ", strconv.Itoa(len(docsT)))
+		for i, item := range docs {
+			m.itemComplement.Render(&b, m, i+start, item)
+			if i != len(docs)-1 {
+				fmt.Fprint(
+					&b, 
+					strings.Repeat(
+						"\n", 
+						m.itemComplement.Spacing() + 1,
+					),
+				)
+			}
+		}
+	}
 
 	return b.String()
 }
