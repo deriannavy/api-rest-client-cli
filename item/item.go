@@ -1,10 +1,18 @@
 package item
 
+import (
+	"fmt"
+	"io"
+	"strings"
+	"github.com/charmbracelet/x/ansi"
+)
+
 type Item struct {
 	// > Json data
 	Name    string  `json:"name"`
 	Request Request `json:"request"`
 }
+
 
 type ItemComplement struct {
 	// > App data
@@ -43,4 +51,47 @@ func (ic ItemComplement) Spacing() int {
 
 func (ic ItemComplement) TotalHeight() int {
 	return ic.Height() + ic.Spacing()
+}
+
+ 
+func (ic ItemComplement) Render(w io.Writer, width int, index int, item Item) {
+
+	var (
+		title, desc  string
+		s            = &ic.Styles
+	)
+
+
+	if i, ok := item.(DefaultItem); ok {
+		title = i.Title()
+		desc = i.Description()
+	} else {
+		return
+	}
+
+	if width <= 0 {
+		// short-circuit
+		return
+	}
+
+	// textwidth := ml.width - s.NormalTitle.GetPaddingLeft() - s.NormalTitle.GetPaddingRight()
+	// title = ansi.Truncate(title, textwidth, ellipsis)
+	// if ic.ShowDescription {
+	// 	var lines []string
+	// 	for i, line := range strings.Split(desc, "\n") {
+	// 		if i >= ic.height-1 {
+	// 			break
+	// 		}
+	// 		lines = append(lines, ansi.Truncate(line, textwidth, ellipsis))
+	// 	}
+	// 	desc = strings.Join(lines, "\n")
+	// }
+
+
+	if item.ShowDescription {
+		fmt.Fprintf(w, "%s\n%s", title, desc) //nolint: errcheck
+		return
+	}
+	fmt.Fprintf(w, "%s", title) //nolint: errcheck
+
 }
