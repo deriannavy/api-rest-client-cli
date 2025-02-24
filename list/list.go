@@ -2,7 +2,6 @@ package list
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -82,7 +81,11 @@ func (m Model) View() string {
 		docs := items[start:end]
 
 		for i, item := range docs {
-			m.itemComplement.Render(&b, m, i+start, item)
+
+			isSelected := i == m.Index()
+
+			m.itemComplement.Render(&b, m.width, isSelected, i+start, item)
+			
 			if i != len(docs)-1 {
 				fmt.Fprint(
 					&b, 

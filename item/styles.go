@@ -2,6 +2,10 @@ package item
 
 import "github.com/charmbracelet/lipgloss"
 
+const (
+	ellipsis = "…"
+)
+
 // DefaultItemStyles defines styling for a default list item.
 // See DefaultItemView for when these come into play.
 type DefaultItemStyles struct {
@@ -13,7 +17,7 @@ type DefaultItemStyles struct {
 	SelectedTitle lipgloss.Style
 	SelectedDesc  lipgloss.Style
 
-	// // The dimmed state, for when the filter input is initially activated.
+	// The dimmed state, for when the filter input is initially activated.
 	// DimmedTitle lipgloss.Style
 	// DimmedDesc  lipgloss.Style
 
@@ -33,12 +37,12 @@ func NewDefaultItemStyles() (s DefaultItemStyles) {
 
 	s.SelectedTitle = lipgloss.NewStyle().
 		Border(lipgloss.NormalBorder(), false, false, false, true).
-		BorderForeground(lipgloss.AdaptiveColor{Light: "#F793FF", Dark: "#AD58B4"}).
-		Foreground(lipgloss.AdaptiveColor{Light: "#EE6FF8", Dark: "#EE6FF8"}).
+		BorderForeground(lipgloss.AdaptiveColor{Light: "#F793FF", Dark: "#990000"}).
+		Foreground(lipgloss.AdaptiveColor{Light: "#EE6FF8", Dark: "#990000"}).
 		Padding(0, 0, 0, 1)
 
 	s.SelectedDesc = s.SelectedTitle.
-		Foreground(lipgloss.AdaptiveColor{Light: "#F793FF", Dark: "#AD58B4"})
+		Foreground(lipgloss.AdaptiveColor{Light: "#F793FF", Dark: "#444444"})
 
 	// s.DimmedTitle = lipgloss.NewStyle().
 	// 	Foreground(lipgloss.AdaptiveColor{Light: "#A49FA5", Dark: "#777777"}).
