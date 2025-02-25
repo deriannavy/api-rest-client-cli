@@ -4,14 +4,16 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/deriannavy/api-rest-client-cli/item"
 	"github.com/deriannavy/api-rest-client-cli/paginator"
 )
 
 type Model struct {
-	// Styles
+	// Styles & Keymaps
 	Styles Styles
+	KeyMap KeyMap
 
 	// Titles & text
 	itemNameSingular string
@@ -41,7 +43,8 @@ func New(items []item.Item, width, height int) Model {
 	p.InactiveDot = s.InactivePaginationDot.String()
 
 	m := Model{
-		Styles:           DefaultStyles(),
+		Styles:           s,
+		KeyMap:           DefaultKeyMap(),
 		itemNameSingular: "item",
 		itemNamePlural:   "items",
 		itemComplement:   ic,
@@ -61,6 +64,17 @@ func New(items []item.Item, width, height int) Model {
 
 func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 	var cmds []tea.Cmd
+
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		switch {
+		case key.Matches(msg, m.KeyMap.CursorUp):
+			m.CursorUp()
+
+		case key.Matches(msg, m.KeyMap.CursorDown):
+			m.CursorDown()
+		}
+	}
 
 	return m, tea.Batch(cmds...)
 }
@@ -82,16 +96,16 @@ func (m Model) View() string {
 
 		for i, item := range docs {
 
-			isSelected := i == m.Index()
+			isSelected := i == m.Cursor()
 
 			m.itemComplement.Render(&b, m.width, isSelected, i+start, item)
-			
+
 			if i != len(docs)-1 {
 				fmt.Fprint(
-					&b, 
+					&b,
 					strings.Repeat(
-						"\n", 
-						m.itemComplement.Spacing() + 1,
+						"\n",
+						m.itemComplement.Spacing()+1,
 					),
 				)
 			}
@@ -107,6 +121,68 @@ func (m Model) View() string {
 // GlobalIndex() instead.
 func (m Model) Index() int {
 	return m.Paginator.Page*m.Paginator.PerPage + m.cursor
+}
+
+// Cursor returns the index of the cursor on the current page.
+func (m Model) Cursor() int {
+	return m.cursor
+}
+
+// CursorUp moves the cursor up. This can also move the state to the previous
+// page.
+func (m *Model) CursorUp() {
+	m.cursor--
+
+	// If we're at the start, stop
+	if m.cursor < 0 && m.Paginator.Page == 0 {
+		// if infinite scrolling is enabled, go to the last item
+		m.Paginator.Page = m.Paginator.TotalPages - 1
+		m.cursor = m.Paginator.ItemsOnPage(len(m.items)) - 1
+		return
+	}
+
+	// Move the cursor as normal
+	if m.cursor >= 0 {
+		return
+	}
+
+	// Go to the previous page
+	m.Paginator.PrevPage()
+	m.cursor = m.Paginator.ItemsOnPage(len(m.items)) - 1
+}
+
+// CursorDown moves the cursor down. This can also advance the state to the
+// next page.
+func (m *Model) CursorDown() {
+	itemsOnPage := m.Paginator.ItemsOnPage(len(m.items))
+
+	m.cursor++
+
+	// If we're at the end, stop
+	if m.cursor < itemsOnPage {
+		return
+	}
+
+	// Go to the next page
+	if !m.Paginator.OnLastPage() {
+		m.Paginator.NextPage()
+		m.cursor = 0
+		return
+	}
+
+	// During filtering the cursor position can exceed the number of
+	// itemsOnPage. It's more intuitive to start the cursor at the
+	// topmost position when moving it down in this scenario.
+	if m.cursor > itemsOnPage {
+		m.cursor = 0
+		return
+	}
+
+	m.cursor = itemsOnPage - 1
+
+	// if infinite scrolling is enabled, go to the first item
+	m.Paginator.Page = 0
+	m.cursor = 0
 }
 
 // SetSize sets the width and height of this component.

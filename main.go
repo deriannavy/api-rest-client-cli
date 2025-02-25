@@ -37,11 +37,17 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		}
 	case tea.WindowSizeMsg:
-		h, v := AppStyle.GetFrameSize()
-		m.list.SetSize(msg.Width-h, msg.Height-v)
+		_, v := AppStyle.GetFrameSize()
+		m.list.SetSize(25, msg.Height-v)
 	}
 
-	var cmds []tea.Cmd
+	var (
+		cmds    []tea.Cmd
+		cmdList tea.Cmd
+	)
+
+	m.list, cmdList = m.list.Update(msg)
+	cmds = append(cmds, cmdList)
 
 	return m, tea.Batch(cmds...)
 }

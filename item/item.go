@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"strings"
+
 	"github.com/charmbracelet/x/ansi"
 )
 
@@ -13,7 +14,6 @@ type Item struct {
 	Request Request `json:"request"`
 }
 
-
 type ItemComplement struct {
 	// > App data
 	ShowDescription bool
@@ -21,7 +21,6 @@ type ItemComplement struct {
 	spacing         int
 	height          int
 }
-
 
 // NewDefaultDelegate creates a new delegate with default styles.
 func NewComplement() ItemComplement {
@@ -54,17 +53,15 @@ func (ic ItemComplement) TotalHeight() int {
 	return ic.Height() + ic.Spacing()
 }
 
- 
 func (ic ItemComplement) Render(w io.Writer, width int, isSelected bool, index int, item Item) {
 
 	var (
-		title, desc  string
-		s            = &ic.Styles
+		title, desc string
+		s           = &ic.Styles
 	)
 
 	title = item.Name
 	desc = item.Name
-	
 
 	if width <= 0 {
 		// short-circuit
@@ -85,7 +82,6 @@ func (ic ItemComplement) Render(w io.Writer, width int, isSelected bool, index i
 	}
 
 	if isSelected {
-		title = "» " + title
 		title = s.SelectedTitle.Render(title)
 		desc = s.SelectedDesc.Render(desc)
 	} else {
@@ -93,11 +89,9 @@ func (ic ItemComplement) Render(w io.Writer, width int, isSelected bool, index i
 		desc = s.NormalDesc.Render(desc)
 	}
 
-
 	if ic.ShowDescription {
 		fmt.Fprintf(w, "%s\n%s", title, desc) //nolint: errcheck
 		return
 	}
 	fmt.Fprintf(w, "%s", title) //nolint: errcheck
-
 }
