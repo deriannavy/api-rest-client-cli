@@ -6,6 +6,7 @@ import (
 
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 	"github.com/deriannavy/api-rest-client-cli/item"
 	"github.com/deriannavy/api-rest-client-cli/paginator"
 )
@@ -112,6 +113,8 @@ func (m Model) View() string {
 		}
 	}
 
+	fmt.Fprintf(&b, "\n  %s", m.Paginator.View())
+
 	return b.String()
 }
 
@@ -201,6 +204,8 @@ func (m *Model) setSize(width, height int) {
 func (m *Model) updatePagination() {
 	index := m.Index()
 	availHeight := m.height
+
+	availHeight -= lipgloss.Height(m.Paginator.View())
 
 	m.Paginator.PerPage = max(1, availHeight/m.itemComplement.TotalHeight())
 

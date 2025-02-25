@@ -93,6 +93,29 @@ func (m *Model) SetTotalPages(items int) int {
 	return n
 }
 
+// View renders the pagination to a string.
+func (m Model) View() string {
+
+	if m.TotalPages < 2 { //nolint:mnd
+		return ""
+	}
+
+	return m.dotsView()
+
+}
+
+func (m Model) dotsView() string {
+	var s string
+	for i := 0; i < m.TotalPages; i++ {
+		if i == m.Page {
+			s += m.ActiveDot
+			continue
+		}
+		s += m.InactiveDot
+	}
+	return s
+}
+
 // > Get the min integer
 func min(a, b int) int {
 	if a < b {

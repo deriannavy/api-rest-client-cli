@@ -1,13 +1,13 @@
 package item
 
 type Header struct {
-	key       string `json:"key"`
-	value     string `json:"value"`
-	valueType string `json:"type"`
+	Key       string `json:"key"`
+	Value     string `json:"value"`
+	ValueType string `json:"type"`
 }
 
 type Body struct {
-	mode string `json:"raw"`
+	Mode string `json:"raw"`
 }
 
 type Request struct {

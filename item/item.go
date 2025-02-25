@@ -27,7 +27,7 @@ func NewComplement() ItemComplement {
 	const defaultHeight = 2
 	const defaultSpacing = 1
 	return ItemComplement{
-		ShowDescription: true,
+		ShowDescription: false,
 		Styles:          NewDefaultItemStyles(),
 		height:          defaultHeight,
 		spacing:         defaultSpacing,
@@ -60,7 +60,7 @@ func (ic ItemComplement) Render(w io.Writer, width int, isSelected bool, index i
 		s           = &ic.Styles
 	)
 
-	title = item.Name
+	title = item.Request.Method + " " + item.Name
 	desc = item.Name
 
 	if width <= 0 {

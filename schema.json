@@ -7,564 +7,559 @@
 	},
 	"item": [
 		{
-			"name": "Desarrollo",
-			"item": [
+			"name": "Cifrado_INE",
+			"event": [
 				{
-					"name": "Cifrado_INE",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let body_Request  = pm.request.body.raw;\r",
-									"let url_base_encriptado = \"https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/venn\";\r",
-									"let id_secret = pm.variables.get(\"id_secret\");\r",
-									"let identidad= JSON.parse(body_Request).identidad\r",
-									"\r",
-									"console.log(identidad);\r",
-									"\r",
-									"    const postRequestCifrarDatosLogin = {\r",
-									"        url:  url_base_encriptado + '/encriptar',\r",
-									"        method: 'POST',\r",
-									"        header: {\r",
-									"                'Content-Type': 'application/json',\r",
-									"                'X-Foo': 'bar'\r",
-									"        },\r",
-									"        body: {\r",
-									"            mode: 'raw',\r",
-									"            raw: JSON.stringify({ \r",
-									"                identidad: JSON.stringify(identidad),   \r",
-									"                id_secret : id_secret                     \r",
-									"            })\r",
-									"        } \r",
-									"    };\r",
-									"    console.log(JSON.stringify({ \r",
-									"                identidad: JSON.stringify(identidad),   \r",
-									"                id_secret : id_secret                     \r",
-									"            }));\r",
-									"    pm.sendRequest(postRequestCifrarDatosLogin,  function (err, response) {\r",
-									"        if (err) {\r",
-									"                console.log(\"Error en cifrado\")\r",
-									"        } else {\r",
-									"            console.log(\"Cifrado OK\")\r",
-									"            let responseBody = JSON.parse(response.text()); \r",
-									"            pm.environment.set(\"encrypt_identidad\", responseBody.identidad);\r",
-									"        }\r",
-									"    })\r",
-									"                "
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"identidad\": {\r\n        \"curp\": \"AETO900621HCCKZM04\",\r\n        \"nombre_completo\": \"OMAR JESUS AKE TUZ\",\r\n        \"fecha_nacimiento\": \"21/06/1990\",\r\n        \"cic\": \"183542152\",\r\n        \"numero_ocr\": \"0153081249788\",\r\n        \"pais_nacimiento\": \"Mexico\",\r\n        \"entidad_federativa\": \"Campeche\",\r\n        \"id_estado\": \"04\"\r\n    }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://servicios-datos-dev.bancodonde.com/catFedConfig/a48f1672-6921-4e8a-9383-3a6b55b2767b?where={\"dCodigo\":\"97143\"}",
-							"protocol": "https",
-							"host": [
-								"servicios-datos-dev",
-								"bancodonde",
-								"com"
-							],
-							"path": [
-								"catFedConfig",
-								"a48f1672-6921-4e8a-9383-3a6b55b2767b"
-							],
-							"query": [
-								{
-									"key": "where",
-									"value": "{\"dCodigo\":\"97143\"}"
-								}
-							]
-						}
-					},
-					"response": []
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
 				},
 				{
-					"name": "Cifrado_FirmaDigital",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let body_Request  = pm.request.body.raw;\r",
-									"let url_base_encriptado = \"https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/venn\";\r",
-									"let id_secret = pm.variables.get(\"id_secret\");\r",
-									"let identidad= JSON.parse(body_Request)\r",
-									"\r",
-									"console.log(identidad);\r",
-									"\r",
-									"    const postRequestCifrarDatosLogin = {\r",
-									"        url:  url_base_encriptado + '/encriptar',\r",
-									"        method: 'POST',\r",
-									"        header: {\r",
-									"                'Content-Type': 'application/json',\r",
-									"                'X-Foo': 'bar'\r",
-									"        },\r",
-									"        body: {\r",
-									"            mode: 'raw',\r",
-									"            raw: JSON.stringify({ \r",
-									"                identidad: JSON.stringify(identidad),   \r",
-									"                id_secret : id_secret                     \r",
-									"            })\r",
-									"        } \r",
-									"    };\r",
-									"    console.log(JSON.stringify({ \r",
-									"                identidad: JSON.stringify(identidad),   \r",
-									"                id_secret : id_secret                     \r",
-									"            }));\r",
-									"    pm.sendRequest(postRequestCifrarDatosLogin,  function (err, response) {\r",
-									"        if (err) {\r",
-									"                console.log(\"Error en cifrado\")\r",
-									"        } else {\r",
-									"            console.log(\"Cifrado OK\")\r",
-									"            let responseBody = JSON.parse(response.text()); \r",
-									"            pm.environment.set(\"encrypt_firma\", responseBody.identidad);\r",
-									"        }\r",
-									"    })\r",
-									"                "
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"firmarDigital\": \"Hola\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://servicios-datos-dev.bancodonde.com/catFedConfig/a48f1672-6921-4e8a-9383-3a6b55b2767b?where={\"dCodigo\":\"97143\"}",
-							"protocol": "https",
-							"host": [
-								"servicios-datos-dev",
-								"bancodonde",
-								"com"
-							],
-							"path": [
-								"catFedConfig",
-								"a48f1672-6921-4e8a-9383-3a6b55b2767b"
-							],
-							"query": [
-								{
-									"key": "where",
-									"value": "{\"dCodigo\":\"97143\"}"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Valida-RFC",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let body_Request  = pm.request.body.raw;\r",
-									"let url_base_encriptado = \"https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/venn\";\r",
-									"let id_secret = pm.variables.get(\"id_secret\");\r",
-									"let rfc= JSON.parse(body_Request).rfc\r",
-									"\r",
-									"\r",
-									"    const postRequestCifrarDatosLogin = {\r",
-									"        url:  url_base_encriptado + '/encriptar',\r",
-									"        method: 'POST',\r",
-									"        header: {\r",
-									"                'Content-Type': 'application/json',\r",
-									"                'X-Foo': 'bar'\r",
-									"        },\r",
-									"        body: {\r",
-									"            mode: 'raw',\r",
-									"            raw: JSON.stringify({ \r",
-									"                rfc: rfc,   \r",
-									"                id_secret : id_secret                     \r",
-									"            })\r",
-									"        } \r",
-									"    };\r",
-									"    pm.sendRequest(postRequestCifrarDatosLogin,  function (err, response) {\r",
-									"        if (err) {\r",
-									"                console.log(\"Error en cifrado\")\r",
-									"        } else {\r",
-									"            console.log(\"Cifrado OK\")\r",
-									"            let responseBody = JSON.parse(response.text()); \r",
-									"            pm.environment.set(\"encrypt_rfc\", responseBody.rfc);\r",
-									"        }\r",
-									"    })\r",
-									"                "
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"rfc\": \"AETO900621E72\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://servicios-datos-dev.bancodonde.com/catFedConfig/a48f1672-6921-4e8a-9383-3a6b55b2767b?where={\"dCodigo\":\"97143\"}",
-							"protocol": "https",
-							"host": [
-								"servicios-datos-dev",
-								"bancodonde",
-								"com"
-							],
-							"path": [
-								"catFedConfig",
-								"a48f1672-6921-4e8a-9383-3a6b55b2767b"
-							],
-							"query": [
-								{
-									"key": "where",
-									"value": "{\"dCodigo\":\"97143\"}"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Cifrado_Domicilio",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let body_Request  = pm.request.body.raw;\r",
-									"let url_base_encriptado = \"https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/venn\";\r",
-									"let id_secret = pm.variables.get(\"id_secret\");\r",
-									"let domicilio= JSON.parse(body_Request).domicilio\r",
-									"\r",
-									"const postRequestCifrarDatosLogin = {\r",
-									"    url:  url_base_encriptado + '/encriptar',\r",
-									"    method: 'POST',\r",
-									"    header: {\r",
-									"                'Content-Type': 'application/json',\r",
-									"                'X-Foo': 'bar'\r",
-									"    },\r",
-									"    body: {\r",
-									"        mode: 'raw',\r",
-									"        raw: JSON.stringify({ \r",
-									"            domicilio: JSON.stringify(domicilio),   \r",
-									"            id_secret : id_secret                     \r",
-									"        })\r",
-									"    } \r",
-									"};\r",
-									"pm.sendRequest(postRequestCifrarDatosLogin,  function (err, response) {\r",
-									"    if (err) {\r",
-									"        console.log(\"Error en cifrado\")\r",
-									"    } else {\r",
-									"        console.log(\"Cifrado OK\")\r",
-									"        let responseBody = JSON.parse(response.text()); \r",
-									"        pm.environment.set(\"encrypt_domicilio\", responseBody.domicilio);\r",
-									"    }\r",
-									"})\r",
-									"                "
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"domicilio\": {\r\n        \"nombre_vialidad\": \"83 426\",\r\n        \"nombre_asentamiento\": \"FRACC LOS HEROES F\",\r\n        \"municipio_delegacion\": \"MERIDA\",\r\n        \"codigo_postal\": \"97000\",\r\n        \"entidad_federativa\": \"31\",\r\n        \"id_estado\": \"Yucatán\",\r\n        \"pais\": \"Mexico\"\r\n    }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://servicios-datos-dev.bancodonde.com/catFedConfig/a48f1672-6921-4e8a-9383-3a6b55b2767b?where={\"dCodigo\":\"97143\"}",
-							"protocol": "https",
-							"host": [
-								"servicios-datos-dev",
-								"bancodonde",
-								"com"
-							],
-							"path": [
-								"catFedConfig",
-								"a48f1672-6921-4e8a-9383-3a6b55b2767b"
-							],
-							"query": [
-								{
-									"key": "where",
-									"value": "{\"dCodigo\":\"97143\"}"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Cifrado_AcercaDeTi",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let body_Request  = pm.request.body.raw;\r",
-									"let url_base_encriptado = \"https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/venn\";\r",
-									"let id_secret = pm.variables.get(\"id_secret\");\r",
-									"let preguntasRespuestas= JSON.parse(body_Request)\r",
-									"\r",
-									"const postRequestCifrarDatosLogin = {\r",
-									"    url:  url_base_encriptado + '/encriptar',\r",
-									"    method: 'POST',\r",
-									"    header: {\r",
-									"                'Content-Type': 'application/json',\r",
-									"                'X-Foo': 'bar'\r",
-									"    },\r",
-									"    body: {\r",
-									"        mode: 'raw',\r",
-									"        raw: JSON.stringify({ \r",
-									"            preguntasRespuestas: JSON.stringify(preguntasRespuestas),   \r",
-									"            id_secret : id_secret                     \r",
-									"        })\r",
-									"    } \r",
-									"};\r",
-									"pm.sendRequest(postRequestCifrarDatosLogin,  function (err, response) {\r",
-									"    if (err) {\r",
-									"        console.log(\"Error en cifrado\")\r",
-									"    } else {\r",
-									"        console.log(\"Cifrado OK\")\r",
-									"        let responseBody = JSON.parse(response.text()); \r",
-									"        pm.environment.set(\"encrypt_preguntasRespuestas\", responseBody.preguntasRespuestas);\r",
-									"    }\r",
-									"})\r",
-									"                "
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"fiscal\": {\r\n        \"RFC\": \"AETO900621E72\",\r\n        \"eFirma\": \"00101010102003002\"\r\n    },\r\n    \"preguntas\": {\r\n        \"OrigenRecursos\": 1,\r\n        \"DestinoRecursos\": 2,\r\n        \"Profesion\": 6,\r\n        \"MovimientosMensuales\": 7,\r\n        \"MontoMensual\": 8,\r\n        \"RelacionesPoliticas\": {\r\n            \"SoyYo\": 0,\r\n            \"EsFamiliar\": {\r\n                \"NombreTitular\": \"Jesus Alejandro Ake Tuz\",\r\n                \"Parentesco\": 5,\r\n                \"PuestoDesempeniado\": \"Funcionario publico\"\r\n            }\r\n        }\r\n    }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://servicios-datos-dev.bancodonde.com/catFedConfig/a48f1672-6921-4e8a-9383-3a6b55b2767b?where={\"dCodigo\":\"97143\"}",
-							"protocol": "https",
-							"host": [
-								"servicios-datos-dev",
-								"bancodonde",
-								"com"
-							],
-							"path": [
-								"catFedConfig",
-								"a48f1672-6921-4e8a-9383-3a6b55b2767b"
-							],
-							"query": [
-								{
-									"key": "where",
-									"value": "{\"dCodigo\":\"97143\"}"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Decifrar_Consulta_ocr",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\"resultado\": \"{{Cifrado_Consulta_OCR}}\",\r\n\"id_secret\" : \"{{id_secret}}\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/venn/decriptar",
-							"protocol": "https",
-							"host": [
-								"87hqu9c2gk",
-								"execute-api",
-								"us-east-1",
-								"amazonaws",
-								"com"
-							],
-							"path": [
-								"dev",
-								"banco",
-								"v1",
-								"venn",
-								"decriptar"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Decifra_Consulta_solicitud",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\"Cifrado_Token_incode\": \"{{Cifrado_Token_incode}}\",\r\n\"Cifrado_rfc\": \"{{Cifrado_rfc}}\",\r\n\"Cifrado_curp\": \"{{Cifrado_curp}}\",\r\n\"Cifrado_data_declaratoria\":\"{{Cifrado_data_declaratoria}}\",\r\n\"Cifrado_data_ine\":\"{{Cifrado_data_ine}}\",\r\n\"Cifrado_data_domicilio\":\"{{Cifrado_data_domicilio}}\",\r\n\"Cifrado_data_acercaDeTi\":\"{{Cifrado_data_acercaDeTi}}\",\r\n\"id_secret\" : \"{{id_secret}}\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/venn/decriptar",
-							"protocol": "https",
-							"host": [
-								"87hqu9c2gk",
-								"execute-api",
-								"us-east-1",
-								"amazonaws",
-								"com"
-							],
-							"path": [
-								"dev",
-								"banco",
-								"v1",
-								"venn",
-								"decriptar"
-							]
-						}
-					},
-					"response": []
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let body_Request  = pm.request.body.raw;\r",
+							"let url_base_encriptado = \"https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/venn\";\r",
+							"let id_secret = pm.variables.get(\"id_secret\");\r",
+							"let identidad= JSON.parse(body_Request).identidad\r",
+							"\r",
+							"console.log(identidad);\r",
+							"\r",
+							"    const postRequestCifrarDatosLogin = {\r",
+							"        url:  url_base_encriptado + '/encriptar',\r",
+							"        method: 'POST',\r",
+							"        header: {\r",
+							"                'Content-Type': 'application/json',\r",
+							"                'X-Foo': 'bar'\r",
+							"        },\r",
+							"        body: {\r",
+							"            mode: 'raw',\r",
+							"            raw: JSON.stringify({ \r",
+							"                identidad: JSON.stringify(identidad),   \r",
+							"                id_secret : id_secret                     \r",
+							"            })\r",
+							"        } \r",
+							"    };\r",
+							"    console.log(JSON.stringify({ \r",
+							"                identidad: JSON.stringify(identidad),   \r",
+							"                id_secret : id_secret                     \r",
+							"            }));\r",
+							"    pm.sendRequest(postRequestCifrarDatosLogin,  function (err, response) {\r",
+							"        if (err) {\r",
+							"                console.log(\"Error en cifrado\")\r",
+							"        } else {\r",
+							"            console.log(\"Cifrado OK\")\r",
+							"            let responseBody = JSON.parse(response.text()); \r",
+							"            pm.environment.set(\"encrypt_identidad\", responseBody.identidad);\r",
+							"        }\r",
+							"    })\r",
+							"                "
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
 				}
-			]
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"identidad\": {\r\n        \"curp\": \"AETO900621HCCKZM04\",\r\n        \"nombre_completo\": \"OMAR JESUS AKE TUZ\",\r\n        \"fecha_nacimiento\": \"21/06/1990\",\r\n        \"cic\": \"183542152\",\r\n        \"numero_ocr\": \"0153081249788\",\r\n        \"pais_nacimiento\": \"Mexico\",\r\n        \"entidad_federativa\": \"Campeche\",\r\n        \"id_estado\": \"04\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://servicios-datos-dev.bancodonde.com/catFedConfig/a48f1672-6921-4e8a-9383-3a6b55b2767b?where={\"dCodigo\":\"97143\"}",
+					"protocol": "https",
+					"host": [
+						"servicios-datos-dev",
+						"bancodonde",
+						"com"
+					],
+					"path": [
+						"catFedConfig",
+						"a48f1672-6921-4e8a-9383-3a6b55b2767b"
+					],
+					"query": [
+						{
+							"key": "where",
+							"value": "{\"dCodigo\":\"97143\"}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cifrado_FirmaDigital",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let body_Request  = pm.request.body.raw;\r",
+							"let url_base_encriptado = \"https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/venn\";\r",
+							"let id_secret = pm.variables.get(\"id_secret\");\r",
+							"let identidad= JSON.parse(body_Request)\r",
+							"\r",
+							"console.log(identidad);\r",
+							"\r",
+							"    const postRequestCifrarDatosLogin = {\r",
+							"        url:  url_base_encriptado + '/encriptar',\r",
+							"        method: 'POST',\r",
+							"        header: {\r",
+							"                'Content-Type': 'application/json',\r",
+							"                'X-Foo': 'bar'\r",
+							"        },\r",
+							"        body: {\r",
+							"            mode: 'raw',\r",
+							"            raw: JSON.stringify({ \r",
+							"                identidad: JSON.stringify(identidad),   \r",
+							"                id_secret : id_secret                     \r",
+							"            })\r",
+							"        } \r",
+							"    };\r",
+							"    console.log(JSON.stringify({ \r",
+							"                identidad: JSON.stringify(identidad),   \r",
+							"                id_secret : id_secret                     \r",
+							"            }));\r",
+							"    pm.sendRequest(postRequestCifrarDatosLogin,  function (err, response) {\r",
+							"        if (err) {\r",
+							"                console.log(\"Error en cifrado\")\r",
+							"        } else {\r",
+							"            console.log(\"Cifrado OK\")\r",
+							"            let responseBody = JSON.parse(response.text()); \r",
+							"            pm.environment.set(\"encrypt_firma\", responseBody.identidad);\r",
+							"        }\r",
+							"    })\r",
+							"                "
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firmarDigital\": \"Hola\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://servicios-datos-dev.bancodonde.com/catFedConfig/a48f1672-6921-4e8a-9383-3a6b55b2767b?where={\"dCodigo\":\"97143\"}",
+					"protocol": "https",
+					"host": [
+						"servicios-datos-dev",
+						"bancodonde",
+						"com"
+					],
+					"path": [
+						"catFedConfig",
+						"a48f1672-6921-4e8a-9383-3a6b55b2767b"
+					],
+					"query": [
+						{
+							"key": "where",
+							"value": "{\"dCodigo\":\"97143\"}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Valida-RFC",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let body_Request  = pm.request.body.raw;\r",
+							"let url_base_encriptado = \"https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/venn\";\r",
+							"let id_secret = pm.variables.get(\"id_secret\");\r",
+							"let rfc= JSON.parse(body_Request).rfc\r",
+							"\r",
+							"\r",
+							"    const postRequestCifrarDatosLogin = {\r",
+							"        url:  url_base_encriptado + '/encriptar',\r",
+							"        method: 'POST',\r",
+							"        header: {\r",
+							"                'Content-Type': 'application/json',\r",
+							"                'X-Foo': 'bar'\r",
+							"        },\r",
+							"        body: {\r",
+							"            mode: 'raw',\r",
+							"            raw: JSON.stringify({ \r",
+							"                rfc: rfc,   \r",
+							"                id_secret : id_secret                     \r",
+							"            })\r",
+							"        } \r",
+							"    };\r",
+							"    pm.sendRequest(postRequestCifrarDatosLogin,  function (err, response) {\r",
+							"        if (err) {\r",
+							"                console.log(\"Error en cifrado\")\r",
+							"        } else {\r",
+							"            console.log(\"Cifrado OK\")\r",
+							"            let responseBody = JSON.parse(response.text()); \r",
+							"            pm.environment.set(\"encrypt_rfc\", responseBody.rfc);\r",
+							"        }\r",
+							"    })\r",
+							"                "
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"rfc\": \"AETO900621E72\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://servicios-datos-dev.bancodonde.com/catFedConfig/a48f1672-6921-4e8a-9383-3a6b55b2767b?where={\"dCodigo\":\"97143\"}",
+					"protocol": "https",
+					"host": [
+						"servicios-datos-dev",
+						"bancodonde",
+						"com"
+					],
+					"path": [
+						"catFedConfig",
+						"a48f1672-6921-4e8a-9383-3a6b55b2767b"
+					],
+					"query": [
+						{
+							"key": "where",
+							"value": "{\"dCodigo\":\"97143\"}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cifrado_Domicilio",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let body_Request  = pm.request.body.raw;\r",
+							"let url_base_encriptado = \"https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/venn\";\r",
+							"let id_secret = pm.variables.get(\"id_secret\");\r",
+							"let domicilio= JSON.parse(body_Request).domicilio\r",
+							"\r",
+							"const postRequestCifrarDatosLogin = {\r",
+							"    url:  url_base_encriptado + '/encriptar',\r",
+							"    method: 'POST',\r",
+							"    header: {\r",
+							"                'Content-Type': 'application/json',\r",
+							"                'X-Foo': 'bar'\r",
+							"    },\r",
+							"    body: {\r",
+							"        mode: 'raw',\r",
+							"        raw: JSON.stringify({ \r",
+							"            domicilio: JSON.stringify(domicilio),   \r",
+							"            id_secret : id_secret                     \r",
+							"        })\r",
+							"    } \r",
+							"};\r",
+							"pm.sendRequest(postRequestCifrarDatosLogin,  function (err, response) {\r",
+							"    if (err) {\r",
+							"        console.log(\"Error en cifrado\")\r",
+							"    } else {\r",
+							"        console.log(\"Cifrado OK\")\r",
+							"        let responseBody = JSON.parse(response.text()); \r",
+							"        pm.environment.set(\"encrypt_domicilio\", responseBody.domicilio);\r",
+							"    }\r",
+							"})\r",
+							"                "
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"domicilio\": {\r\n        \"nombre_vialidad\": \"83 426\",\r\n        \"nombre_asentamiento\": \"FRACC LOS HEROES F\",\r\n        \"municipio_delegacion\": \"MERIDA\",\r\n        \"codigo_postal\": \"97000\",\r\n        \"entidad_federativa\": \"31\",\r\n        \"id_estado\": \"Yucatán\",\r\n        \"pais\": \"Mexico\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://servicios-datos-dev.bancodonde.com/catFedConfig/a48f1672-6921-4e8a-9383-3a6b55b2767b?where={\"dCodigo\":\"97143\"}",
+					"protocol": "https",
+					"host": [
+						"servicios-datos-dev",
+						"bancodonde",
+						"com"
+					],
+					"path": [
+						"catFedConfig",
+						"a48f1672-6921-4e8a-9383-3a6b55b2767b"
+					],
+					"query": [
+						{
+							"key": "where",
+							"value": "{\"dCodigo\":\"97143\"}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cifrado_AcercaDeTi",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let body_Request  = pm.request.body.raw;\r",
+							"let url_base_encriptado = \"https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/venn\";\r",
+							"let id_secret = pm.variables.get(\"id_secret\");\r",
+							"let preguntasRespuestas= JSON.parse(body_Request)\r",
+							"\r",
+							"const postRequestCifrarDatosLogin = {\r",
+							"    url:  url_base_encriptado + '/encriptar',\r",
+							"    method: 'POST',\r",
+							"    header: {\r",
+							"                'Content-Type': 'application/json',\r",
+							"                'X-Foo': 'bar'\r",
+							"    },\r",
+							"    body: {\r",
+							"        mode: 'raw',\r",
+							"        raw: JSON.stringify({ \r",
+							"            preguntasRespuestas: JSON.stringify(preguntasRespuestas),   \r",
+							"            id_secret : id_secret                     \r",
+							"        })\r",
+							"    } \r",
+							"};\r",
+							"pm.sendRequest(postRequestCifrarDatosLogin,  function (err, response) {\r",
+							"    if (err) {\r",
+							"        console.log(\"Error en cifrado\")\r",
+							"    } else {\r",
+							"        console.log(\"Cifrado OK\")\r",
+							"        let responseBody = JSON.parse(response.text()); \r",
+							"        pm.environment.set(\"encrypt_preguntasRespuestas\", responseBody.preguntasRespuestas);\r",
+							"    }\r",
+							"})\r",
+							"                "
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fiscal\": {\r\n        \"RFC\": \"AETO900621E72\",\r\n        \"eFirma\": \"00101010102003002\"\r\n    },\r\n    \"preguntas\": {\r\n        \"OrigenRecursos\": 1,\r\n        \"DestinoRecursos\": 2,\r\n        \"Profesion\": 6,\r\n        \"MovimientosMensuales\": 7,\r\n        \"MontoMensual\": 8,\r\n        \"RelacionesPoliticas\": {\r\n            \"SoyYo\": 0,\r\n            \"EsFamiliar\": {\r\n                \"NombreTitular\": \"Jesus Alejandro Ake Tuz\",\r\n                \"Parentesco\": 5,\r\n                \"PuestoDesempeniado\": \"Funcionario publico\"\r\n            }\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://servicios-datos-dev.bancodonde.com/catFedConfig/a48f1672-6921-4e8a-9383-3a6b55b2767b?where={\"dCodigo\":\"97143\"}",
+					"protocol": "https",
+					"host": [
+						"servicios-datos-dev",
+						"bancodonde",
+						"com"
+					],
+					"path": [
+						"catFedConfig",
+						"a48f1672-6921-4e8a-9383-3a6b55b2767b"
+					],
+					"query": [
+						{
+							"key": "where",
+							"value": "{\"dCodigo\":\"97143\"}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Decifrar_Consulta_ocr",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"resultado\": \"{{Cifrado_Consulta_OCR}}\",\r\n\"id_secret\" : \"{{id_secret}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/venn/decriptar",
+					"protocol": "https",
+					"host": [
+						"87hqu9c2gk",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"banco",
+						"v1",
+						"venn",
+						"decriptar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Decifra_Consulta_solicitud",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"Cifrado_Token_incode\": \"{{Cifrado_Token_incode}}\",\r\n\"Cifrado_rfc\": \"{{Cifrado_rfc}}\",\r\n\"Cifrado_curp\": \"{{Cifrado_curp}}\",\r\n\"Cifrado_data_declaratoria\":\"{{Cifrado_data_declaratoria}}\",\r\n\"Cifrado_data_ine\":\"{{Cifrado_data_ine}}\",\r\n\"Cifrado_data_domicilio\":\"{{Cifrado_data_domicilio}}\",\r\n\"Cifrado_data_acercaDeTi\":\"{{Cifrado_data_acercaDeTi}}\",\r\n\"id_secret\" : \"{{id_secret}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://87hqu9c2gk.execute-api.us-east-1.amazonaws.com/dev/banco/v1/venn/decriptar",
+					"protocol": "https",
+					"host": [
+						"87hqu9c2gk",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"banco",
+						"v1",
+						"venn",
+						"decriptar"
+					]
+				}
+			},
+			"response": []
 		},
 		{
 			"name": "01_Login Automático",
