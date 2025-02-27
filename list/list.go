@@ -7,6 +7,7 @@ import (
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	app "github.com/deriannavy/api-rest-client-cli/application"
 	"github.com/deriannavy/api-rest-client-cli/item"
 	"github.com/deriannavy/api-rest-client-cli/paginator"
 )
@@ -14,11 +15,7 @@ import (
 type Model struct {
 	// Styles & Keymaps
 	Styles Styles
-	KeyMap KeyMap
-
-	// Titles & text
-	itemNameSingular string
-	itemNamePlural   string
+	KeyMap app.KeyMap
 
 	// Components
 	Paginator      paginator.Model
@@ -28,9 +25,11 @@ type Model struct {
 	width  int
 	height int
 
-	// Items & indexs
-	cursor int
-	items  []item.Item
+	// Items & index
+	index       int
+	cursor      int
+	items       []item.Item
+	itemsLength int
 }
 
 func New(items []item.Item, width, height int) Model {
@@ -44,23 +43,41 @@ func New(items []item.Item, width, height int) Model {
 	p.InactiveDot = s.InactivePaginationDot.String()
 
 	m := Model{
-		Styles:           s,
-		KeyMap:           DefaultKeyMap(),
-		itemNameSingular: "item",
-		itemNamePlural:   "items",
-		itemComplement:   ic,
-		Paginator:        p,
-		width:            width,
-		height:           height,
+		Styles:         s,
+		KeyMap:         app.DefaultKeyMap(),
+		itemComplement: ic,
+		Paginator:      p,
+		width:          width,
+		height:         height,
 
 		// > Lists
-		items: items,
+		index:       0,
+		items:       items,
+		itemsLength: len(items),
 	}
 
 	m.updatePagination()
 
 	return m
 
+}
+
+// Get the page Size based on the list height / single item height
+func (m Model) PageSize() int {
+	return max(1, m.height/m.itemComplement.TotalHeight())
+}
+
+// Get the total pages based on the items length / page size
+func (m Model) TotalPages() int {
+	// redondear hacia arriba
+	return m.itemsLength / m.PageSize()
+}
+
+func (m Model) CurrentPage() (int, int) {
+	coefficient := m.index / m.PageSize()
+	start := (m.index * coefficient) + 1
+	end := min(m.itemsLength, start+m.PageSize())
+	return start, end
 }
 
 func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
@@ -87,33 +104,25 @@ func (m Model) View() string {
 	var b strings.Builder
 
 	// Empty states
-	if len(items) <= 0 {
-		return m.Styles.NoItems.Render("No " + m.itemNamePlural + ".")
+	if m.itemsLength <= 0 {
+		return m.Styles.NoItems.Render("No Items.")
 	}
 
-	if len(items) > 0 {
-		start, end := m.Paginator.GetSliceBounds(len(items))
+	if m.itemsLength > 0 {
+		start, end := m.Paginator.GetSliceBounds(m.itemsLength)
+		startLL, endLL := m.CurrentPage()
 		docs := items[start:end]
+		fmt.Fprintf(&b, "  [%d.%d]\n", start, end)
+		fmt.Fprintf(&b, "  [%d.%d]\n", startLL, endLL)
 
 		for i, item := range docs {
 
 			isSelected := i == m.Cursor()
 
-			m.itemComplement.Render(&b, m.width, isSelected, i+start, item)
-
-			if i != len(docs)-1 {
-				fmt.Fprint(
-					&b,
-					strings.Repeat(
-						"\n",
-						m.itemComplement.Spacing()+1,
-					),
-				)
-			}
+			m.itemComplement.Render(&b, isSelected, item)
 		}
-	}
 
-	fmt.Fprintf(&b, "\n  %s", m.Paginator.View())
+	}
 
 	return b.String()
 }
@@ -206,7 +215,7 @@ func (m *Model) updatePagination() {
 	availHeight := m.height
 
 	availHeight -= lipgloss.Height(m.Paginator.View())
-
+	availHeight -= 1
 	m.Paginator.PerPage = max(1, availHeight/m.itemComplement.TotalHeight())
 
 	if pages := len(m.items); pages < 1 {
