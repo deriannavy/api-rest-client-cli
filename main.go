@@ -8,20 +8,21 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	app "github.com/deriannavy/api-rest-client-cli/application"
-	"github.com/deriannavy/api-rest-client-cli/list"
+	"github.com/deriannavy/api-rest-client-cli/handler"
+	"github.com/deriannavy/api-rest-client-cli/ui"
 )
 
 var (
 	Configuration app.Configuration
 
-	keyMap = app.DefaultKeyMap()
+	keyMap = handler.DefaultKeyMap()
 
-	AppStyle = lipgloss.NewStyle().Padding(1, 2)
+	AppStyle = lipgloss.NewStyle().Padding(1, 0, 0, 0)
 )
 
 type model struct {
-	keyMap app.KeyMap
-	list   list.Model
+	keyMap handler.KeyMap
+	list   ui.List
 	// panel panel.Model
 }
 
@@ -37,8 +38,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		}
 	case tea.WindowSizeMsg:
-		_, v := AppStyle.GetFrameSize()
-		m.list.SetSize(25, msg.Height-v)
+		h, v := AppStyle.GetFrameSize()
+		m.list.Size.SetSize(msg.Width-h, msg.Height-v)
 	}
 
 	var (
@@ -69,7 +70,7 @@ func main() {
 
 	m := model{
 		keyMap: keyMap,
-		list:   list.New(Configuration.Items, 0, 0),
+		list:   ui.NewList(Configuration.Items, 1, 1),
 		// panel: components.NewPanel(itemsConfig),
 	}
 

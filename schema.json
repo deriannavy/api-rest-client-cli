@@ -494,7 +494,7 @@
 				}
 			],
 			"request": {
-				"method": "POST",
+				"method": "OPTIONS",
 				"header": [],
 				"body": {
 					"mode": "raw",
@@ -752,7 +752,7 @@
 						}
 					]
 				},
-				"method": "POST",
+				"method": "DELETE",
 				"header": [
 					{
 						"key": "x-api-key",
@@ -1243,7 +1243,7 @@
 				{
 					"name": "200. Exito Cifrado",
 					"originalRequest": {
-						"method": "POST",
+						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -1584,7 +1584,7 @@
 						}
 					]
 				},
-				"method": "POST",
+				"method": "PATCH",
 				"header": [],
 				"body": {
 					"mode": "raw",
