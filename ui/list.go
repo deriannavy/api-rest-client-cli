@@ -14,11 +14,9 @@ type List struct {
 	Styles ListStyle
 	KeyMap handler.KeyMap
 	// Components
-	itemComplement ItemComplement
+	ItemComplement ItemComplement
 	// Window Size
 	Size handler.SizeSpec
-	// width  int
-	// height int
 	// Items & index
 	index       int
 	itemsLength int
@@ -31,7 +29,7 @@ func NewList(items []Item, width, height int) List {
 		Styles: DefaultListStyle(),
 		KeyMap: handler.DefaultKeyMap(),
 		// Components
-		itemComplement: NewComplement(width, 1),
+		ItemComplement: NewComplement(width, 1),
 		// Window Size
 		Size: handler.NewSizeSpec(width, height),
 		// Items & index
@@ -43,7 +41,7 @@ func NewList(items []Item, width, height int) List {
 
 // Get the page Size based on the list height / single item height
 func (l List) PageSize() int {
-	return max(1, l.Size.Height()/l.itemComplement.Size.Height())
+	return max(1, l.Size.Height()/l.ItemComplement.Size.Height())
 }
 
 // Get the number current page based in the index
@@ -69,29 +67,35 @@ func (l List) Update(msg tea.Msg) (List, tea.Cmd) {
 	case tea.KeyMsg:
 		switch {
 		case key.Matches(msg, l.KeyMap.CursorUp):
-			l.CursorUp()
+			cmds = append(cmds, l.CursorUp())
 
 		case key.Matches(msg, l.KeyMap.CursorDown):
-			l.CursorDown()
+			cmds = append(cmds, l.CursorDown())
 		}
 	}
 
 	return l, tea.Batch(cmds...)
 }
 
-func (l *List) CursorUp() {
+func (l *List) CursorUp() tea.Cmd {
 	if l.index == 0 {
 		l.index = (l.itemsLength - 1)
 	} else {
 		l.index--
 	}
+	return func() tea.Msg {
+		return handler.NewCursorMoveMsg(l.index)
+	}
 }
 
-func (l *List) CursorDown() {
+func (l *List) CursorDown() tea.Cmd {
 	if l.index == (l.itemsLength - 1) {
 		l.index = 0
 	} else {
 		l.index++
+	}
+	return func() tea.Msg {
+		return handler.NewCursorMoveMsg(l.index)
 	}
 }
 
@@ -105,9 +109,7 @@ func (l List) View() string {
 	}
 
 	for _, item := range l.CurrentPageItems() {
-		// item := l.itemComplement.Render(item, l.index)
-		item := item.View(l.itemComplement, l.index == item.Index)
-		fmt.Fprintf(&b, "%s\n", item)
+		fmt.Fprintf(&b, "%s\n", item.View(l.ItemComplement, l.index == item.Index))
 	}
 
 	return b.String()

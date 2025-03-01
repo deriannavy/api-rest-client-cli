@@ -27,7 +27,6 @@ func DefaultKeyMap() KeyMap {
 			key.WithKeys("down", "j"),
 			key.WithHelp("↓/j", "down"),
 		),
-
 		// Quitting.
 		Quit: key.NewBinding(
 			key.WithKeys("q", "esc"),

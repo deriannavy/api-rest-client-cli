@@ -23,7 +23,7 @@ var (
 type model struct {
 	keyMap handler.KeyMap
 	list   ui.List
-	// panel panel.Model
+	panel  ui.Panel
 }
 
 func (m model) Init() tea.Cmd {
@@ -39,17 +39,27 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	case tea.WindowSizeMsg:
 		h, v := AppStyle.GetFrameSize()
-		m.list.Size.SetSize(msg.Width-h, msg.Height-v)
+		listMaxWidth := 25 // change soon
+		m.list.Size.SetSize(listMaxWidth-h, msg.Height-v)
+		m.list.ItemComplement.Size.SetWidth(listMaxWidth - h)
+		m.panel.Size.SetSize(msg.Width, msg.Height-v)
+		m.panel.ItemComplement.Size.SetWidth(msg.Width - h)
+	case handler.CursorMoveMsg:
+		currentItem := Configuration.Items[msg.Index]
+		m.panel.SetItem(currentItem)
 	}
 
 	var (
-		cmds    []tea.Cmd
-		cmdList tea.Cmd
+		cmds     []tea.Cmd
+		cmdList  tea.Cmd
+		cmdPanel tea.Cmd
 	)
 
 	m.list, cmdList = m.list.Update(msg)
 	cmds = append(cmds, cmdList)
-
+	m.panel, cmdPanel = m.panel.Update(msg)
+	cmds = append(cmds, cmdPanel)
+	// agregar tabs al panel
 	return m, tea.Batch(cmds...)
 }
 
@@ -59,7 +69,7 @@ func (m model) View() string {
 		lipgloss.JoinHorizontal(
 			lipgloss.Top,
 			m.list.View(),
-			// m.panel.View(),
+			m.panel.View(),
 		),
 	)
 }
@@ -71,7 +81,7 @@ func main() {
 	m := model{
 		keyMap: keyMap,
 		list:   ui.NewList(Configuration.Items, 1, 1),
-		// panel: components.NewPanel(itemsConfig),
+		panel:  ui.NewPanel(Configuration.Items[0], 1, 1),
 	}
 
 	p := tea.NewProgram(m, tea.WithAltScreen())
