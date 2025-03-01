@@ -5,13 +5,17 @@ import (
 	"io"
 	"os"
 
-	"github.com/deriannavy/api-rest-client-cli/item"
+	"github.com/deriannavy/api-rest-client-cli/ui"
 )
 
 // https://schema.postman.com/json/collection/v2.1.0/collection.json
 type Configuration struct {
 	Information Information `json:"information"`
-	Items       []item.Item `json:"item"`
+	Items       []ui.Item   `json:"item"`
+}
+
+type Information struct {
+	Name string `json:"name"`
 }
 
 func check(e error) {
@@ -34,6 +38,10 @@ func LoadConfiguration(c *Configuration) {
 
 	if err := json.Unmarshal(data, &c); err != nil {
 		check(err)
+	}
+
+	for i := range c.Items {
+		c.Items[i].Index = i
 	}
 
 }
