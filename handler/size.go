@@ -4,9 +4,9 @@ type SizeSpec struct {
 	// Attributes
 	height int
 	width  int
-	// Available
-	availableHeight int
-	availableWidth  int
+	// Used
+	usedHeight int
+	usedWidth  int
 }
 
 func NewSizeSpec(width, height int) SizeSpec {
@@ -18,14 +18,14 @@ func NewSizeSpec(width, height int) SizeSpec {
 
 func (ss *SizeSpec) SetSize(width, height int) {
 	ss.width = width
-	ss.availableWidth = width
+	ss.usedWidth = width
 	ss.height = height
-	ss.availableHeight = height
+	ss.usedHeight = height
 }
 
 func (ss *SizeSpec) SetWidth(width int) {
 	ss.width = width
-	ss.availableWidth = width
+	ss.usedWidth = width
 }
 
 func (ss *SizeSpec) Width() int {
@@ -36,9 +36,23 @@ func (ss *SizeSpec) Height() int {
 	return ss.height
 }
 
-func (ss *SizeSpec) SubstractAvailableHeight(clear bool, substract int) {
+func (ss *SizeSpec) AddUsedHeight(clear bool, add int) {
 	if clear {
-		ss.availableHeight = ss.Height()
+		ss.usedHeight = 0
 	}
-	ss.availableHeight -= ss.height
+	ss.usedHeight += add
+}
+
+func (ss SizeSpec) UsedHeight() int {
+	return ss.usedHeight
+}
+
+func (ss SizeSpec) AvailableHeight() int {
+	availableHeight := ss.height - ss.usedHeight
+
+	if availableHeight < 0 {
+		availableHeight = 0
+	}
+
+	return availableHeight
 }

@@ -108,8 +108,11 @@ func (l List) View() string {
 		return l.Styles.NoItems.Render("No Items.")
 	}
 
-	for _, item := range l.CurrentPageItems() {
-		fmt.Fprintf(&b, "%s\n", item.View(l.ItemComplement, l.index == item.Index))
+	for i, item := range l.CurrentPageItems() {
+		fmt.Fprintf(&b, "%s", item.View(l.ItemComplement, l.index == item.Index))
+		if i != (l.PageSize() - 1) {
+			fmt.Fprint(&b, "\n")
+		}
 	}
 
 	return b.String()

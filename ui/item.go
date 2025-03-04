@@ -2,6 +2,7 @@ package ui
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/charmbracelet/x/ansi"
@@ -99,9 +100,10 @@ func (i Item) MethodFormat(ic ItemComplement, align string) string {
 
 func (i Item) TitleFormat(ic ItemComplement, isSelected bool) string {
 	var (
-		textwidth = ic.Size.Width() - ic.Styles.NormalTitle.GetPaddingLeft() - ic.Styles.NormalTitle.GetPaddingRight()
-		name      = ansi.Truncate(i.Name, textwidth, ellipsis)
-		title     = ic.Styles.NormalTitle.Render(name)
+		textwidth  = ic.Size.Width() - ic.Styles.NormalTitle.GetPaddingLeft() - ic.Styles.NormalTitle.GetPaddingRight()
+		nameFormat = fmt.Sprintf("%-"+strconv.Itoa(textwidth)+"s", i.Name)
+		name       = ansi.Truncate(nameFormat, textwidth, ellipsis)
+		title      = ic.Styles.NormalTitle.Render(name)
 	)
 	if isSelected {
 		title = ic.Styles.SelectedTitle.Render(name)
