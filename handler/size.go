@@ -11,16 +11,18 @@ type SizeSpec struct {
 
 func NewSizeSpec(width, height int) SizeSpec {
 	return SizeSpec{
-		height: height,
-		width:  width,
+		height:     height,
+		width:      width,
+		usedHeight: 0,
+		usedWidth:  0,
 	}
 }
 
 func (ss *SizeSpec) SetSize(width, height int) {
 	ss.width = width
-	ss.usedWidth = width
+	ss.usedWidth = 0
 	ss.height = height
-	ss.usedHeight = height
+	ss.usedHeight = 0
 }
 
 func (ss *SizeSpec) SetWidth(width int) {

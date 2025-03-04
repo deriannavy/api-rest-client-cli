@@ -2,10 +2,8 @@ package ui
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
-	"github.com/charmbracelet/x/ansi"
 	"github.com/deriannavy/api-rest-client-cli/handler"
 )
 
@@ -86,9 +84,9 @@ func (i Item) MethodFormat(ic ItemComplement, align string) string {
 	case "PATCH":
 		method = ic.Styles.PatchMethod.Render(fmt.Sprintf(strFormat, wlarge, "PTCH"))
 	case "DELETE":
-		method = ic.Styles.DeleteMethod.Render(fmt.Sprintf(strFormat, wlarge, "DEL"))
+		method = ic.Styles.DeleteMethod.Render(fmt.Sprintf(strFormat, wlarge, "DELE"))
 	case "OPTIONS":
-		method = ic.Styles.OptionsMethod.Render(fmt.Sprintf(strFormat, wlarge, "OPT"))
+		method = ic.Styles.OptionsMethod.Render(fmt.Sprintf(strFormat, wlarge, "OPTS"))
 	case "HEAD":
 		method = ic.Styles.HeadMethod.Render(fmt.Sprintf(strFormat, wlarge, "HEAD"))
 	default:
@@ -100,10 +98,9 @@ func (i Item) MethodFormat(ic ItemComplement, align string) string {
 
 func (i Item) TitleFormat(ic ItemComplement, isSelected bool) string {
 	var (
-		textwidth  = ic.Size.Width() - ic.Styles.NormalTitle.GetPaddingLeft() - ic.Styles.NormalTitle.GetPaddingRight()
-		nameFormat = fmt.Sprintf("%-"+strconv.Itoa(textwidth)+"s", i.Name)
-		name       = ansi.Truncate(nameFormat, textwidth, ellipsis)
-		title      = ic.Styles.NormalTitle.Render(name)
+		textwidth = ic.Size.Width() - ic.Styles.NormalTitle.GetPaddingLeft() - ic.Styles.NormalTitle.GetPaddingRight()
+		name      = handler.Truncate(i.Name, ellipsis, "left", textwidth)
+		title     = ic.Styles.NormalTitle.Render(name)
 	)
 	if isSelected {
 		title = ic.Styles.SelectedTitle.Render(name)

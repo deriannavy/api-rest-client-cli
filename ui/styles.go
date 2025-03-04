@@ -27,7 +27,7 @@ func DefaultListStyle() ListStyle {
 		NoItems: lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#909090", Dark: "#626262"}),
 
 		// Styled characters.
-		ActivePaginationDot:   lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#847A85", Dark: "#979797"}).SetString(bullet),
+		ActivePaginationDot:   lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#847A85", Dark: "#FFFFFF"}).SetString(bullet),
 		InactivePaginationDot: lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#DDDADA", Dark: "#3C3C3C"}).SetString(bullet),
 	}
 }
@@ -66,14 +66,14 @@ func DefaultItemStyle() ItemStyle {
 		SelectedCursor: lipgloss.NewStyle().Foreground(lipgloss.Color("212")).Padding(0, 0, 0, 1),
 
 		// Methods Style
-		GetMethod:     lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#68D696"}).Align(lipgloss.Right).Padding(0, 0, 0, 1),
-		PostMethod:    lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#F5DB7B"}).Align(lipgloss.Right).Padding(0, 0, 0, 1),
-		PutMethod:     lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#486385"}).Align(lipgloss.Right).Padding(0, 0, 0, 1),
-		PatchMethod:   lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#BEA6DE"}).Align(lipgloss.Right).Padding(0, 0, 0, 1),
-		DeleteMethod:  lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#F2958D"}).Align(lipgloss.Right).Padding(0, 0, 0, 1),
-		OptionsMethod: lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#D959AC"}).Align(lipgloss.Right).Padding(0, 0, 0, 1),
-		HeadMethod:    lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#68D696"}).Align(lipgloss.Right).Padding(0, 0, 0, 1),
-		UnknowMethod:  lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#999999"}).Align(lipgloss.Right).Padding(0, 0, 0, 1),
+		GetMethod:     lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#68D696"}).Padding(0, 0, 0, 1),
+		PostMethod:    lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#F5DB7B"}).Padding(0, 0, 0, 1),
+		PutMethod:     lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#486385"}).Padding(0, 0, 0, 1),
+		PatchMethod:   lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#BEA6DE"}).Padding(0, 0, 0, 1),
+		DeleteMethod:  lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#F2958D"}).Padding(0, 0, 0, 1),
+		OptionsMethod: lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#D959AC"}).Padding(0, 0, 0, 1),
+		HeadMethod:    lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#68D696"}).Padding(0, 0, 0, 1),
+		UnknowMethod:  lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#999999"}).Padding(0, 0, 0, 1),
 
 		// Url Style
 		UrlStyle: lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#aaaaaa"}).Padding(0, 0, 0, 1), //nolint:mnd
