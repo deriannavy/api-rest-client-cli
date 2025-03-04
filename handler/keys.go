@@ -8,6 +8,10 @@ type KeyMap struct {
 	CursorUp   key.Binding
 	CursorDown key.Binding
 
+	// Keybindings used when browsing the tabs.
+	PrevTab key.Binding
+	NextTab key.Binding
+
 	// The quit keybinding. This won't be caught when filtering.
 	Quit key.Binding
 
@@ -26,6 +30,15 @@ func DefaultKeyMap() KeyMap {
 		CursorDown: key.NewBinding(
 			key.WithKeys("down", "j"),
 			key.WithHelp("↓/j", "down"),
+		),
+		// Browsing Tabs.
+		PrevTab: key.NewBinding(
+			key.WithKeys("shift+tab"),
+			key.WithHelp("shift+tab", "prev tab"),
+		),
+		NextTab: key.NewBinding(
+			key.WithKeys("tab"),
+			key.WithHelp("tab", "next tab"),
 		),
 		// Quitting.
 		Quit: key.NewBinding(

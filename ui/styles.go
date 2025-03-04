@@ -5,9 +5,10 @@ import (
 )
 
 const (
-	bullet   = "•"
-	ellipsis = "…"
-	cursor   = "→"
+	bullet       = "•"
+	ellipsis     = "…"
+	cursor       = "→"
+	tabIndicator = "•"
 )
 
 // Styles contains style definitions for the item component
@@ -58,8 +59,8 @@ type ItemStyle struct {
 func DefaultItemStyle() ItemStyle {
 	return ItemStyle{
 		// The selected and normal state.
-		NormalTitle:   lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#aaaaaa"}).Padding(0, 0, 0, 1), //nolint:mnd
-		SelectedTitle: lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#F793FF", Dark: "#ffffff"}).Padding(0, 0, 0, 1),
+		NormalTitle:   lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#aaaaaa"}).Padding(0, 1, 0, 1), //nolint:mnd
+		SelectedTitle: lipgloss.NewStyle().Bold(true).Foreground(lipgloss.AdaptiveColor{Light: "#F793FF", Dark: "#ffffff"}).Padding(0, 1, 0, 1),
 
 		// Cursor Style
 		SelectedCursor: lipgloss.NewStyle().Foreground(lipgloss.Color("212")).Padding(0, 0, 0, 1),
@@ -80,8 +81,37 @@ func DefaultItemStyle() ItemStyle {
 }
 
 type PanelStyle struct {
+	// Border Style
+	BorderLeftStyle lipgloss.Style
 }
 
 func DefaultPanelStyle() PanelStyle {
-	return PanelStyle{}
+	return PanelStyle{
+		// Border Style
+		BorderLeftStyle: lipgloss.NewStyle().Border(lipgloss.NormalBorder(), false, false, false, true).BorderForeground(lipgloss.AdaptiveColor{Light: "#F793FF", Dark: "#444444"}),
+	}
+}
+
+type TabsStyle struct {
+	// The selected and normal state for horizontal tabs.
+	NormalTitle   lipgloss.Style
+	SelectedTitle lipgloss.Style
+	// The selected and normal state for vertical tabs.
+	NormalBorderTitle   lipgloss.Style
+	SelectedBorderTitle lipgloss.Style
+	// Cursor Style
+	SelectedCursor lipgloss.Style
+}
+
+func DefaultTabsStyle() TabsStyle {
+	return TabsStyle{
+		// The selected and normal state.
+		NormalTitle:   lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#aaaaaa"}).Padding(0, 0, 0, 1), //nolint:mnd
+		SelectedTitle: lipgloss.NewStyle().Bold(true).Foreground(lipgloss.AdaptiveColor{Light: "#F793FF", Dark: "#ffffff"}).Padding(0, 0, 0, 1),
+		// The selected and normal state.
+		NormalBorderTitle:   lipgloss.NewStyle().Border(lipgloss.NormalBorder(), false, false, true, false).Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#aaaaaa"}).Padding(0, 0, 0, 1), //nolint:mnd
+		SelectedBorderTitle: lipgloss.NewStyle().Bold(true).Border(lipgloss.NormalBorder(), false, false, true, false).BorderForeground(lipgloss.AdaptiveColor{Light: "#F793FF", Dark: "#444444"}).Foreground(lipgloss.AdaptiveColor{Light: "#F793FF", Dark: "#ffffff"}).Padding(0, 0, 0, 1),
+		// Cursor Style
+		SelectedCursor: lipgloss.NewStyle().Foreground(lipgloss.Color("212")).Padding(0, 0, 0, 1),
+	}
 }

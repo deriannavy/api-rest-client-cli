@@ -57,9 +57,10 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	m.list, cmdList = m.list.Update(msg)
 	cmds = append(cmds, cmdList)
+
 	m.panel, cmdPanel = m.panel.Update(msg)
 	cmds = append(cmds, cmdPanel)
-	// agregar tabs al panel
+
 	return m, tea.Batch(cmds...)
 }
 
