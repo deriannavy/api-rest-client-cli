@@ -17,7 +17,7 @@ var (
 
 	keyMap = handler.DefaultKeyMap()
 
-	AppStyle = lipgloss.NewStyle().Padding(1, 0, 0, 0)
+	AppStyle = lipgloss.NewStyle().Padding(0, 0, 1, 0)
 )
 
 type model struct {
@@ -40,10 +40,13 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		h, v := AppStyle.GetFrameSize()
 		listMaxWidth := 25 // change soon
+
 		m.list.Size.SetSize(listMaxWidth-h, msg.Height-v)
-		m.list.ItemComplement.Size.SetWidth(listMaxWidth - h)
+		m.list.ItemComplement.Size.SetWidth(listMaxWidth)
+
 		m.panel.Size.SetSize(msg.Width, msg.Height-v)
-		m.panel.ItemComplement.Size.SetWidth(msg.Width - h)
+		m.panel.ItemComplement.Size.SetWidth(msg.Width)
+
 	case handler.CursorMoveMsg:
 		currentItem := Configuration.Items[msg.Index]
 		m.panel.SetItem(currentItem)

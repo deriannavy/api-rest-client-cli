@@ -6,6 +6,7 @@ import (
 
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 	"github.com/deriannavy/api-rest-client-cli/handler"
 )
 
@@ -41,7 +42,19 @@ func NewList(items []Item, width, height int) List {
 
 // Get the page Size based on the list height / single item height
 func (l List) PageSize() int {
-	return max(1, l.Size.Height()/l.ItemComplement.Size.Height())
+	return max(1, l.Size.AvailableHeight()/l.ItemComplement.Size.Height())
+}
+
+func (l List) ShowPageDot(index int) lipgloss.Style {
+	if index == l.CurrentNumberPage() {
+		return l.Styles.ActivePaginationDot
+	}
+	return l.Styles.InactivePaginationDot
+}
+
+// Get the Total Pages based on the page size and total Items
+func (l List) TotalPages() int {
+	return max(1, l.itemsLength/l.PageSize())
 }
 
 // Get the number current page based in the index
@@ -108,12 +121,21 @@ func (l List) View() string {
 		return l.Styles.NoItems.Render("No Items.")
 	}
 
-	for i, item := range l.CurrentPageItems() {
-		fmt.Fprintf(&b, "%s", item.View(l.ItemComplement, l.index == item.Index))
-		if i != (l.PageSize() - 1) {
-			fmt.Fprint(&b, "\n")
-		}
+	// Save space for pagination
+	l.Size.AddUsedHeight(false, 1)
+
+	for _, item := range l.CurrentPageItems() {
+		fmt.Fprintf(&b, "%s\n", item.View(l.ItemComplement, l.index == item.Index))
+		// if i != (l.PageSize() - 1) {
+		// 	fmt.Fprint(&b, "\n")
+		// }
 	}
+
+	fmt.Fprint(&b, "   ")
+	for i := 0; i <= l.TotalPages(); i++ {
+		fmt.Fprintf(&b, "%s", l.ShowPageDot(i))
+	}
+	// fmt.Fprintf(&b, "%d", l.CurrentNumberPage())
 
 	return b.String()
 }
