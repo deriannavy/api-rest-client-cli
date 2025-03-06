@@ -8,11 +8,12 @@ import (
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/deriannavy/api-rest-client-cli/handler"
+	"github.com/deriannavy/api-rest-client-cli/styles"
 )
 
 type List struct {
 	// Styles & Keymaps
-	Styles ListStyle
+	Styles styles.ListStyle
 	KeyMap handler.KeyMap
 	// Components
 	ItemComplement ItemComplement
@@ -27,7 +28,7 @@ type List struct {
 func NewList(items []Item, width, height int) List {
 	return List{
 		// Styles & Keymaps
-		Styles: DefaultListStyle(),
+		Styles: styles.DefaultListStyle(),
 		KeyMap: handler.DefaultKeyMap(),
 		// Components
 		ItemComplement: NewComplement(width, 1),
@@ -47,9 +48,9 @@ func (l List) PageSize() int {
 
 func (l List) ShowPageDot(index int) string {
 	if index == l.CurrentNumberPage() {
-		return l.Styles.ActivePaginationDot.Render(bullet)
+		return l.Styles.ActivePaginationDot.Render(styles.Bullet)
 	}
-	return l.Styles.InactivePaginationDot.Render(bullet)
+	return l.Styles.InactivePaginationDot.Render(styles.Bullet)
 }
 
 // Generate pagination
