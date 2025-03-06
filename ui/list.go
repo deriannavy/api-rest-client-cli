@@ -2,17 +2,18 @@ package ui
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
 	"github.com/deriannavy/api-rest-client-cli/handler"
+	"github.com/deriannavy/api-rest-client-cli/styles"
 )
 
 type List struct {
 	// Styles & Keymaps
-	Styles ListStyle
+	Styles styles.ListStyle
 	KeyMap handler.KeyMap
 	// Components
 	ItemComplement ItemComplement
@@ -27,7 +28,7 @@ type List struct {
 func NewList(items []Item, width, height int) List {
 	return List{
 		// Styles & Keymaps
-		Styles: DefaultListStyle(),
+		Styles: styles.DefaultListStyle(),
 		KeyMap: handler.DefaultKeyMap(),
 		// Components
 		ItemComplement: NewComplement(width, 1),
@@ -45,16 +46,26 @@ func (l List) PageSize() int {
 	return max(1, l.Size.AvailableHeight()/l.ItemComplement.Size.Height())
 }
 
-func (l List) ShowPageDot(index int) lipgloss.Style {
+func (l List) ShowPageDot(index int) string {
 	if index == l.CurrentNumberPage() {
-		return l.Styles.ActivePaginationDot
+		return l.Styles.ActivePaginationDot.Render(styles.Bullet)
 	}
-	return l.Styles.InactivePaginationDot
+	return l.Styles.InactivePaginationDot.Render(styles.Bullet)
+}
+
+// Generate pagination
+func (l List) GeneratePagination() string {
+	pagination := "   "
+	for i := range l.TotalPages() {
+		pagination += l.ShowPageDot(i)
+	}
+	return pagination
 }
 
 // Get the Total Pages based on the page size and total Items
+// If the total page is equal to 1 return 0
 func (l List) TotalPages() int {
-	return max(1, l.itemsLength/l.PageSize())
+	return (l.itemsLength / l.PageSize()) + 1
 }
 
 // Get the number current page based in the index
@@ -91,22 +102,16 @@ func (l List) Update(msg tea.Msg) (List, tea.Cmd) {
 }
 
 func (l *List) CursorUp() tea.Cmd {
-	if l.index == 0 {
-		l.index = (l.itemsLength - 1)
-	} else {
-		l.index--
-	}
+	n := handler.TernaryNumber(l.index == 0, (l.itemsLength - 1), l.index-1)
+	l.index = n
 	return func() tea.Msg {
 		return handler.NewCursorMoveMsg(l.index)
 	}
 }
 
 func (l *List) CursorDown() tea.Cmd {
-	if l.index == (l.itemsLength - 1) {
-		l.index = 0
-	} else {
-		l.index++
-	}
+	n := handler.TernaryNumber(l.index == (l.itemsLength-1), 0, l.index+1)
+	l.index = n
 	return func() tea.Msg {
 		return handler.NewCursorMoveMsg(l.index)
 	}
@@ -114,28 +119,32 @@ func (l *List) CursorDown() tea.Cmd {
 
 func (l List) View() string {
 
-	var b strings.Builder
-
 	// Empty states
 	if l.itemsLength <= 0 {
 		return l.Styles.NoItems.Render("No Items.")
 	}
 
-	// Save space for pagination
-	l.Size.AddUsedHeight(false, 1)
+	var b strings.Builder
 
+	// T I T L E | Show title and item count
+	l.Size.AddUsedHeight(false, 2)
+	fmt.Fprintf(&b, "    %s\n\n", "Request • "+strconv.Itoa(l.itemsLength)+" items")
+
+	// P A G I N A T O R | Save space for pagination if this is greater than 1
+	l.Size.AddUsedHeight(false, 2)
+	pagination := l.GeneratePagination()
+
+	// L I S T | Print list lines
 	for _, item := range l.CurrentPageItems() {
+		l.Size.AddUsedHeight(false, 1)
 		fmt.Fprintf(&b, "%s\n", item.View(l.ItemComplement, l.index == item.Index))
-		// if i != (l.PageSize() - 1) {
-		// 	fmt.Fprint(&b, "\n")
-		// }
 	}
 
-	fmt.Fprint(&b, "   ")
-	for i := 0; i <= l.TotalPages(); i++ {
-		fmt.Fprintf(&b, "%s", l.ShowPageDot(i))
-	}
-	// fmt.Fprintf(&b, "%d", l.CurrentNumberPage())
+	// L I S T | Set lines for every available line to push pagination at the end
+	fmt.Fprint(&b, strings.Repeat("\n", l.Size.AvailableHeight()))
+
+	// P A G I N A T O R | Print pagination
+	fmt.Fprintf(&b, "\n%s", pagination)
 
 	return b.String()
 }

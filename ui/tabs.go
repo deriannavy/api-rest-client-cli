@@ -2,62 +2,79 @@ package ui
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/charmbracelet/bubbles/key"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/deriannavy/api-rest-client-cli/handler"
+	"github.com/deriannavy/api-rest-client-cli/styles"
 )
+
+type Tab struct {
+	Name  string
+	Badge int
+}
 
 type Tabs struct {
 	// Styles & Keymaps
 	TabType string
-	Styles  TabsStyle
+	Styles  styles.TabsStyle
 	KeyMap  handler.KeyMap
 	// Tabs Index & Name
 	index     int
-	Sections  []string
+	Sections  []Tab
 	Separator string
 	// Window Size
 	Size handler.SizeSpec
 }
 
 func NewTabComponent(TabType string, sections []string, width, height int) Tabs {
+
+	var tabSection []Tab
+
+	for i, s := range sections {
+		tabSection = append(tabSection, Tab{s, i})
+	}
+
 	return Tabs{
 		// Styles & Keymaps
 		TabType: TabType,
-		Styles:  DefaultTabsStyle(),
+		Styles:  styles.DefaultTabsStyle(),
 		KeyMap:  handler.DefaultKeyMap(),
 		// Tabs Index & Name
 		index:     0,
-		Sections:  sections,
+		Sections:  tabSection,
 		Separator: "  ",
 		// Window Size
 		Size: handler.NewSizeSpec(width, height),
 	}
 }
 
-func (t Tabs) SectionFormat(section string, isSelected bool) string {
+func (t Tabs) SectionFormat(tab Tab, isSelected bool) string {
 	var (
 		cursor = t.Styles.SelectedCursor.Render(" ")
-		title  = t.Styles.NormalTitle.Render(section)
+		title  = t.Styles.NormalTitle.Render(tab.Name)
 	)
 	if isSelected {
-		cursor = t.Styles.SelectedCursor.Render(tabIndicator)
-		title = t.Styles.SelectedTitle.Render(section)
+		cursor = t.Styles.SelectedCursor.Render(styles.TabIndicator)
+		title = t.Styles.SelectedTitle.Render(tab.Name)
 	}
 	return cursor + title
 }
 
-func (t Tabs) SectionBorderFormat(section string, isSelected bool) string {
+func (t Tabs) SectionBorderFormat(tab Tab, isSelected bool, i int) string {
 	var (
-		title = t.Styles.NormalBorderTitle.Render(section)
+		leftBorder  = handler.Ternary(i == 0, " ", t.Styles.NormalBorderTitle.Render("│ "))
+		badgeNumber = strconv.Itoa(tab.Badge)
+		style       = t.Styles.NormalBorderTitle
 	)
 	if isSelected {
-		title = t.Styles.SelectedBorderTitle.Render(section)
+		// badgeNumber = " "
+		style = t.Styles.SelectedBorderTitle
 	}
-	return title
+	return leftBorder + style.Render(tab.Name) + " " + t.Styles.BadgeStyle.Render(badgeNumber)
 }
 
 func (t Tabs) Update(msg tea.Msg) (Tabs, tea.Cmd) {
@@ -103,12 +120,15 @@ func (t Tabs) View() string {
 
 	var b strings.Builder
 
-	for i, s := range t.Sections {
+	for i, tab := range t.Sections {
 		if t.TabType == "Horizontal" {
-			fmt.Fprintf(&b, "%s%s", t.SectionFormat(s, i == t.index), t.Separator)
+			fmt.Fprintf(&b, "%s%s", t.SectionFormat(tab, i == t.index), t.Separator)
 		} else if t.TabType == "Vertical" {
-			fmt.Fprintf(&b, "%s", t.SectionBorderFormat(s, i == t.index))
+			fmt.Fprintf(&b, "%s", t.SectionBorderFormat(tab, i == t.index, i))
 		}
+		// if (i+1) == len(t.Sections) && t.TabType == "Vertical" {
+		// 	fmt.Fprintf(&b, "%s", " │")
+		// }
 	}
 
 	fmt.Fprintf(&b, "\n")

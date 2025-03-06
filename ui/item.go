@@ -1,10 +1,11 @@
 package ui
 
 import (
-	"fmt"
 	"strings"
 
+	"github.com/charmbracelet/lipgloss"
 	"github.com/deriannavy/api-rest-client-cli/handler"
+	"github.com/deriannavy/api-rest-client-cli/styles"
 )
 
 type Item struct {
@@ -40,16 +41,30 @@ type Request struct {
 
 type ItemComplement struct {
 	Size   handler.SizeSpec
-	Styles ItemStyle
+	Styles styles.ItemStyle
 }
 
 // NewDefaultDelegate creates a new delegate with default styles.
 func NewComplement(width, height int) ItemComplement {
 	return ItemComplement{
 		Size:   handler.NewSizeSpec(width, height),
-		Styles: DefaultItemStyle(),
+		Styles: styles.DefaultItemStyle(),
 	}
 }
+
+func (r Request) MethodAbreviated(align string) string {
+	switch r.Method {
+	case "GET", "POST", "PUT", "DELETE", "HEAD":
+		return handler.Truncate(r.Method, "", align, 4)
+	case "PATCH":
+		return "PTCH"
+	case "OPTIONS":
+		return "OPTS"
+	default:
+		return "UKNW"
+	}
+}
+
 func (i Item) UrlFormat(ic ItemComplement) string {
 	var (
 		protocol = i.Request.Url.Protocol
@@ -64,42 +79,44 @@ func (i Item) UrlFormat(ic ItemComplement) string {
 	return ic.Styles.UrlStyle.Render(url)
 }
 
-func (i Item) MethodFormat(ic ItemComplement, align string) string {
-	var (
-		method        string
-		requestMethod = i.Request.Method
-		strFormat     = "%*s"
-		wlarge        = 4
-	)
-	if align == "right" {
-		strFormat = "%-*s"
+func (i Item) MethodFormat(align string, abreviated bool) string {
+	if abreviated {
+		return i.Request.MethodAbreviated(align)
+	} else {
+		return i.Request.Method
 	}
-	switch requestMethod {
-	case "GET":
-		method = ic.Styles.GetMethod.Render(fmt.Sprintf(strFormat, wlarge, "GET"))
-	case "POST":
-		method = ic.Styles.PostMethod.Render(fmt.Sprintf(strFormat, wlarge, "POST"))
-	case "PUT":
-		method = ic.Styles.PutMethod.Render(fmt.Sprintf(strFormat, wlarge, "PUT"))
-	case "PATCH":
-		method = ic.Styles.PatchMethod.Render(fmt.Sprintf(strFormat, wlarge, "PTCH"))
-	case "DELETE":
-		method = ic.Styles.DeleteMethod.Render(fmt.Sprintf(strFormat, wlarge, "DELE"))
-	case "OPTIONS":
-		method = ic.Styles.OptionsMethod.Render(fmt.Sprintf(strFormat, wlarge, "OPTS"))
-	case "HEAD":
-		method = ic.Styles.HeadMethod.Render(fmt.Sprintf(strFormat, wlarge, "HEAD"))
-	default:
-		method = ic.Styles.UnknowMethod.Render(fmt.Sprintf(strFormat, wlarge, "UKNW"))
-	}
+}
 
-	return method
+func (i Item) MethodFormatStyle(ic ItemComplement, align string, abreviated bool) string {
+	var (
+		method = i.MethodFormat(align, abreviated)
+		style  lipgloss.Style
+	)
+	switch method {
+	case "GET", " GET":
+		style = ic.Styles.GetMethod
+	case "POST":
+		style = ic.Styles.PostMethod
+	case "PUT", " PUT":
+		style = ic.Styles.PutMethod
+	case "PTCH", "PATCH":
+		style = ic.Styles.PatchMethod
+	case "DELE", "DELETE", " DEL":
+		style = ic.Styles.DeleteMethod
+	case "OPTS", "OPTIONS":
+		style = ic.Styles.OptionsMethod
+	case "HEAD":
+		style = ic.Styles.HeadMethod
+	default:
+		style = ic.Styles.UnknowMethod
+	}
+	return style.Render(method)
 }
 
 func (i Item) TitleFormat(ic ItemComplement, isSelected bool) string {
 	var (
 		textwidth = ic.Size.Width() - ic.Styles.NormalTitle.GetPaddingLeft() - ic.Styles.NormalTitle.GetPaddingRight()
-		name      = handler.Truncate(i.Name, ellipsis, "left", textwidth)
+		name      = handler.Truncate(i.Name, styles.Ellipsis, "left", textwidth)
 		title     = ic.Styles.NormalTitle.Render(name)
 	)
 	if isSelected {
@@ -110,13 +127,13 @@ func (i Item) TitleFormat(ic ItemComplement, isSelected bool) string {
 
 func (i Item) View(ic ItemComplement, isSelected bool) string {
 	var (
-		ccursor = " "
-		method  = i.MethodFormat(ic, "left")
-		title   = i.TitleFormat(ic, isSelected)
+		cursor = " "
+		method = i.MethodFormatStyle(ic, "right", true)
+		title  = i.TitleFormat(ic, isSelected)
 	)
 
 	if isSelected {
-		ccursor = cursor
+		cursor = styles.Cursor
 	}
-	return ic.Styles.SelectedCursor.Render(ccursor) + method + title
+	return ic.Styles.SelectedCursor.Render(cursor) + method + title
 }
