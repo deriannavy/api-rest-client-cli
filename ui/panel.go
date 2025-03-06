@@ -75,11 +75,8 @@ func (p Panel) Render() string {
 
 	fmt.Fprintf(&b, "%s\n", p.Item.TitleFormat(p.ItemComplement, true))
 	p.Size.AddUsedHeight(false, 2)
-	fmt.Fprintf(&b, "%s%s", p.Item.MethodFormat(p.ItemComplement, "right"), p.Item.UrlFormat(p.ItemComplement))
+	fmt.Fprintf(&b, "%s%s\n", p.Item.MethodFormat(p.ItemComplement, "right"), p.Item.UrlFormat(p.ItemComplement))
 	p.Size.AddUsedHeight(false, 1)
-
-	// // Fill restant space
-	// fmt.Fprint(&b, strings.Repeat("\n", p.Size.AvailableHeight()))
 
 	return b.String()
 }
@@ -91,7 +88,7 @@ func (p Panel) View() string {
 
 	RequestTabs := p.RequestTabs.View()
 	p.Size.AddUsedHeight(false, lipgloss.Height(RequestTabs))
-
+	// strings.Repeat("\n", p.Size.AvailableHeight())
 	return p.Styles.BorderLeftStyle.Render(
 		lipgloss.JoinVertical(
 			lipgloss.Left,

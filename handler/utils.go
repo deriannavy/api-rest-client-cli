@@ -3,9 +3,17 @@ package handler
 import (
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 func Ternary(expresion bool, value, coditionalValue string) string {
+	if expresion {
+		return value
+	}
+	return coditionalValue
+}
+
+func TernaryNumber(expresion bool, value, coditionalValue int) int {
 	if expresion {
 		return value
 	}
@@ -31,4 +39,15 @@ func Truncate(text, tail, align string, length int) string {
 	textFormated := fmt.Sprintf(formater, sizedText)
 
 	return textFormated
+}
+
+func FillCenter(text string, length int) string {
+	if len(text) >= length {
+		return text
+	}
+
+	spaces := length - len(text)
+	borderSpace := strings.Repeat(" ", spaces/2)
+
+	return text + strconv.Itoa(length) + borderSpace
 }

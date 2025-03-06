@@ -51,13 +51,12 @@ func (t Tabs) SectionFormat(section string, isSelected bool) string {
 }
 
 func (t Tabs) SectionBorderFormat(section string, isSelected bool) string {
-	var (
-		title = t.Styles.NormalBorderTitle.Render(section)
-	)
+
+	s := t.Styles.NormalBorderTitle
 	if isSelected {
-		title = t.Styles.SelectedBorderTitle.Render(section)
+		s = t.Styles.SelectedBorderTitle
 	}
-	return title
+	return t.Styles.NormalBorderTitle.Render("| ") + s.Render(section) + " "
 }
 
 func (t Tabs) Update(msg tea.Msg) (Tabs, tea.Cmd) {
@@ -108,6 +107,9 @@ func (t Tabs) View() string {
 			fmt.Fprintf(&b, "%s%s", t.SectionFormat(s, i == t.index), t.Separator)
 		} else if t.TabType == "Vertical" {
 			fmt.Fprintf(&b, "%s", t.SectionBorderFormat(s, i == t.index))
+		}
+		if (i+1) == len(t.Sections) && t.TabType == "Vertical" {
+			fmt.Fprintf(&b, "%s", " |")
 		}
 	}
 
