@@ -2,7 +2,6 @@ package ui
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"github.com/charmbracelet/bubbles/key"
@@ -12,12 +11,9 @@ import (
 	"github.com/deriannavy/api-rest-client-cli/styles"
 )
 
-type Tab struct {
-	Name  string
-	Badge int
-}
-
 type Tabs struct {
+	// Item
+	item Item
 	// Styles & Keymaps
 	TabType string
 	Styles  styles.TabsStyle
@@ -30,19 +26,20 @@ type Tabs struct {
 	Size handler.SizeSpec
 }
 
-func NewTabComponent(TabType string, sections []string, width, height int) Tabs {
+func NewTabComponent(item Item, sections []string, width, height int) Tabs {
 
 	var tabSection []Tab
-
-	for i, s := range sections {
-		tabSection = append(tabSection, Tab{s, i})
+	// initialize tab
+	for _, s := range sections {
+		tabSection = append(tabSection, Tab{s, "2"})
 	}
 
 	return Tabs{
+		// Item
+		item: item,
 		// Styles & Keymaps
-		TabType: TabType,
-		Styles:  styles.DefaultTabsStyle(),
-		KeyMap:  handler.DefaultKeyMap(),
+		Styles: styles.DefaultTabsStyle(),
+		KeyMap: handler.DefaultKeyMap(),
 		// Tabs Index & Name
 		index:     0,
 		Sections:  tabSection,
@@ -67,7 +64,7 @@ func (t Tabs) SectionFormat(tab Tab, isSelected bool) string {
 func (t Tabs) SectionBorderFormat(tab Tab, isSelected bool, i int) string {
 	var (
 		leftBorder  = handler.Ternary(i == 0, " ", t.Styles.NormalBorderTitle.Render("│ "))
-		badgeNumber = strconv.Itoa(tab.Badge)
+		badgeNumber = tab.Badge
 		style       = t.Styles.NormalBorderTitle
 	)
 	if isSelected {
@@ -121,14 +118,7 @@ func (t Tabs) View() string {
 	var b strings.Builder
 
 	for i, tab := range t.Sections {
-		if t.TabType == "Horizontal" {
-			fmt.Fprintf(&b, "%s%s", t.SectionFormat(tab, i == t.index), t.Separator)
-		} else if t.TabType == "Vertical" {
-			fmt.Fprintf(&b, "%s", t.SectionBorderFormat(tab, i == t.index, i))
-		}
-		// if (i+1) == len(t.Sections) && t.TabType == "Vertical" {
-		// 	fmt.Fprintf(&b, "%s", " │")
-		// }
+		fmt.Fprintf(&b, "%s", t.SectionBorderFormat(tab, i == t.index, i))
 	}
 
 	fmt.Fprintf(&b, "\n")
