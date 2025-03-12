@@ -33,7 +33,7 @@ func NewPanel(item Item, width, height int) Panel {
 		Size: handler.NewSizeSpec(width, height),
 		// Components
 		ItemComplement: NewComplement(width, 1),
-		RequestTab:     NewTabComponent("Vertical", []string{"Params", "Headers", "Body"}, width, 1),
+		RequestTab:     NewTabComponent(item, []string{"Params", "Headers", "Body"}, width, 1),
 		// Item
 		Item: item,
 	}
@@ -91,6 +91,11 @@ func (p Panel) View() string {
 		{"——————", "20", "Page size"},
 	}
 
+	tt := NewTable(
+		[]string{"Key", "Value", "Description"},
+		[][]string{[]string{}},
+	)
+
 	t := table.New().
 		BorderStyle(lipgloss.NewStyle().Foreground(lipgloss.Color("#444444"))).
 		BorderTop(false).
@@ -118,6 +123,7 @@ func (p Panel) View() string {
 			lipgloss.Left,
 			p.Render(),
 			RequestTabs,
+			tt.View(),
 			t.String(),
 		),
 	)
