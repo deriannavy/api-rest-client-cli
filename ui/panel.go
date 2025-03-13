@@ -86,15 +86,16 @@ func (p Panel) View() string {
 
 	rows := [][]string{
 		{"offset", "5", "About what digit start"},
-		{"limit", "10", "Limit set to the list"},
-		{"page_size", "20", "Page size"},
-		{"——————", "20", "Page size"},
+		{"offset", "5", "About what digit start"},
 	}
 
-	tt := NewTable(
-		[]string{"Key", "Value", "Description"},
-		[][]string{[]string{}},
-	)
+	tt := NewTable()
+
+	tt.AddHeaders("Key", "Value", "Description")
+	tt.AddRow([]string{"offset", "5", "About what digit start"})
+	tt.AddRow([]string{"limit", "10", "Limit set to the list"})
+	tt.AddRow([]string{"page_size", "20", "Page size"})
+	tt.AddRow([]string{"asss", "20", "Page size"})
 
 	t := table.New().
 		BorderStyle(lipgloss.NewStyle().Foreground(lipgloss.Color("#444444"))).

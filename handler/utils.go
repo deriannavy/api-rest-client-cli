@@ -47,7 +47,8 @@ func FillCenter(text string, length int) string {
 	}
 
 	spaces := length - len(text)
-	borderSpace := strings.Repeat(" ", spaces/2)
+	leftSpace := strings.Repeat(" ", spaces-(spaces/2))
+	rightSpace := strings.Repeat(" ", spaces/2)
 
-	return text + strconv.Itoa(length) + borderSpace
+	return leftSpace + text + rightSpace
 }
