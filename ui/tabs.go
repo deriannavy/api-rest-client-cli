@@ -15,9 +15,8 @@ type Tabs struct {
 	// Item
 	item Item
 	// Styles & Keymaps
-	TabType string
-	Styles  styles.TabsStyle
-	KeyMap  handler.KeyMap
+	Styles styles.TabsStyle
+	KeyMap handler.KeyMap
 	// Tabs Index & Name
 	index     int
 	Sections  []Tab
@@ -26,14 +25,7 @@ type Tabs struct {
 	Size handler.SizeSpec
 }
 
-func NewTabComponent(item Item, sections []string, width, height int) Tabs {
-
-	var tabSection []Tab
-	// initialize tab
-	for _, s := range sections {
-		tabSection = append(tabSection, Tab{s, "2"})
-	}
-
+func NewTabComponent(item Item, width, height int) Tabs {
 	return Tabs{
 		// Item
 		item: item,
@@ -42,23 +34,18 @@ func NewTabComponent(item Item, sections []string, width, height int) Tabs {
 		KeyMap: handler.DefaultKeyMap(),
 		// Tabs Index & Name
 		index:     0,
-		Sections:  tabSection,
 		Separator: "  ",
 		// Window Size
 		Size: handler.NewSizeSpec(width, height),
 	}
 }
 
-func (t Tabs) SectionFormat(tab Tab, isSelected bool) string {
-	var (
-		cursor = t.Styles.SelectedCursor.Render(" ")
-		title  = t.Styles.NormalTitle.Render(tab.Name)
-	)
-	if isSelected {
-		cursor = t.Styles.SelectedCursor.Render(styles.TabIndicator)
-		title = t.Styles.SelectedTitle.Render(tab.Name)
-	}
-	return cursor + title
+func (t *Tabs) SetItem(item Item) {
+	t.item = item
+}
+
+func (t *Tabs) AddTab(tab Tab) {
+	t.Sections = append(t.Sections, tab)
 }
 
 func (t Tabs) SectionBorderFormat(tab Tab, isSelected bool, i int) string {
@@ -68,7 +55,6 @@ func (t Tabs) SectionBorderFormat(tab Tab, isSelected bool, i int) string {
 		style       = t.Styles.NormalBorderTitle
 	)
 	if isSelected {
-		// badgeNumber = " "
 		style = t.Styles.SelectedBorderTitle
 	}
 	return leftBorder + style.Render(tab.Name) + " " + t.Styles.BadgeStyle.Render(badgeNumber)
@@ -92,22 +78,14 @@ func (t Tabs) Update(msg tea.Msg) (Tabs, tea.Cmd) {
 }
 
 func (t *Tabs) PrevTab() tea.Cmd {
-	if t.index == 0 {
-		t.index = (len(t.Sections) - 1)
-	} else {
-		t.index--
-	}
+	t.index = handler.TernaryNumber(t.index == 0, (len(t.Sections) - 1), t.index-1)
 	return func() tea.Msg {
 		return handler.NewTabMoveMsg(t.index)
 	}
 }
 
 func (t *Tabs) NextTab() tea.Cmd {
-	if t.index == (len(t.Sections) - 1) {
-		t.index = 0
-	} else {
-		t.index++
-	}
+	t.index = handler.TernaryNumber(t.index == (len(t.Sections)-1), 0, t.index+1)
 	return func() tea.Msg {
 		return handler.NewTabMoveMsg(t.index)
 	}

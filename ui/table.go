@@ -43,7 +43,7 @@ func (t *Table) AddHeaders(headers ...string) {
 	}
 }
 
-func (t *Table) AddRow(row []string) {
+func (t *Table) AddRow(row ...string) {
 	for i, cell := range row {
 		t.MaxCellWidth[i] = max(len(cell), t.MaxCellWidth[i])
 	}

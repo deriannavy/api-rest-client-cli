@@ -1,6 +1,7 @@
 package ui
 
 type Tab struct {
-	Name  string
-	Badge string
+	Name      string
+	Badge     string
+	BadgeType string
 }
