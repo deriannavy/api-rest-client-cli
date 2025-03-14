@@ -6,7 +6,6 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/charmbracelet/lipgloss/table"
 	"github.com/deriannavy/api-rest-client-cli/handler"
 	"github.com/deriannavy/api-rest-client-cli/styles"
 )
@@ -19,12 +18,19 @@ type Panel struct {
 	Size handler.SizeSpec
 	// Components
 	ItemComplement ItemComplement
-	RequestTab     Tabs
+	Tab            Tabs
 	// Item
 	Item Item
 }
 
 func NewPanel(item Item, width, height int) Panel {
+
+	tabs := NewTabComponent(item, width, 1)
+
+	tabs.AddTab(Tab{"Parameters", "", "number"})
+	tabs.AddTab(Tab{"Headers", "", "number"})
+	tabs.AddTab(Tab{"Body", "", "boolean"})
+
 	return Panel{
 		// Styles & Keymaps
 		Styles: styles.DefaultPanelStyle(),
@@ -33,7 +39,7 @@ func NewPanel(item Item, width, height int) Panel {
 		Size: handler.NewSizeSpec(width, height),
 		// Components
 		ItemComplement: NewComplement(width, 1),
-		RequestTab:     NewTabComponent(item, []string{"Params", "Headers", "Body"}, width, 1),
+		Tab:            tabs,
 		// Item
 		Item: item,
 	}
@@ -49,20 +55,12 @@ func (p Panel) Update(msg tea.Msg) (Panel, tea.Cmd) {
 		cmdTabs tea.Cmd
 	)
 
-	// switch msg := msg.(type) {
+	switch msg.(type) {
+	case handler.CursorMoveMsg:
+		p.Tab.SetItem(p.Item)
+	}
 
-	// 	case tea.KeyMsg:
-	// 	switch {
-	// 	case key.Matches(msg, l.KeyMap.CursorUp):
-	// 		cmds = append(cmds, l.CursorUp())
-
-	// 	case key.Matches(msg, l.KeyMap.CursorDown):
-	// 		cmds = append(cmds, l.CursorDown())
-	// 	}
-
-	// }
-
-	p.RequestTab, cmdTabs = p.RequestTab.Update(msg)
+	p.Tab, cmdTabs = p.Tab.Update(msg)
 	cmds = append(cmds, cmdTabs)
 
 	return p, tea.Batch(cmds...)
@@ -81,50 +79,24 @@ func (p Panel) Render() string {
 
 func (p Panel) View() string {
 
-	RequestTabs := p.RequestTab.View()
-	p.Size.AddUsedHeight(true, lipgloss.Height(RequestTabs))
+	Tabs := p.Tab.View()
+	p.Size.AddUsedHeight(true, lipgloss.Height(Tabs))
 
-	rows := [][]string{
-		{"offset", "5", "About what digit start"},
-		{"limit", "10", "Limit set to the list"},
-		{"page_size", "20", "Page size"},
-		{"——————", "20", "Page size"},
-	}
+	t := NewTable()
 
-	tt := NewTable(
-		[]string{"Key", "Value", "Description"},
-		[][]string{[]string{}},
-	)
-
-	t := table.New().
-		BorderStyle(lipgloss.NewStyle().Foreground(lipgloss.Color("#444444"))).
-		BorderTop(false).
-		BorderLeft(false).
-		BorderRight(false).
-		BorderBottom(true).
-		// BorderColumn(false).
-		BorderRow(true).
-		StyleFunc(func(row, col int) lipgloss.Style {
-			switch {
-			case row == table.HeaderRow:
-				return lipgloss.NewStyle().Foreground(lipgloss.Color("245")).Bold(true).Align(lipgloss.Center)
-			case row%2 == 0:
-				return lipgloss.NewStyle().Padding(0, 1).Width(14).Foreground(lipgloss.Color("241"))
-			default:
-				return lipgloss.NewStyle().Padding(0, 1).Width(14).Foreground(lipgloss.Color("245"))
-			}
-		}).
-		Headers("key", "Value", "Description").
-		Rows(rows...)
+	t.AddHeaders("Key", "Value", "Description")
+	t.AddRow("offset", "5", "About what digit start")
+	t.AddRow("limit", "10", "Limit set to the list")
+	t.AddRow("page_size", "20", "Page size")
+	t.AddRow("asss", "20", "Page size")
 
 	// strings.Repeat("\n", p.Size.AvailableHeight())
 	return p.Styles.BorderLeftStyle.Render(
 		lipgloss.JoinVertical(
 			lipgloss.Left,
 			p.Render(),
-			RequestTabs,
-			tt.View(),
-			t.String(),
+			Tabs,
+			t.View(),
 		),
 	)
 
