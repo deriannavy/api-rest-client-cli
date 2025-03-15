@@ -18,18 +18,12 @@ type Panel struct {
 	Size handler.SizeSpec
 	// Components
 	ItemComplement ItemComplement
-	Tab            Tabs
+	Tabs           Tabs
 	// Item
 	Item Item
 }
 
 func NewPanel(item Item, width, height int) Panel {
-
-	tabs := NewTabComponent(item, width, 1)
-
-	tabs.AddTab(Tab{"Parameters", "", "number"})
-	tabs.AddTab(Tab{"Headers", "", "number"})
-	tabs.AddTab(Tab{"Body", "", "boolean"})
 
 	return Panel{
 		// Styles & Keymaps
@@ -39,7 +33,7 @@ func NewPanel(item Item, width, height int) Panel {
 		Size: handler.NewSizeSpec(width, height),
 		// Components
 		ItemComplement: NewComplement(width, 1),
-		Tab:            tabs,
+		Tabs:           NewTabComponent(item, width, 1),
 		// Item
 		Item: item,
 	}
@@ -57,10 +51,10 @@ func (p Panel) Update(msg tea.Msg) (Panel, tea.Cmd) {
 
 	switch msg.(type) {
 	case handler.CursorMoveMsg:
-		p.Tab.SetItem(p.Item)
+		p.Tabs.SetItem(p.Item)
 	}
 
-	p.Tab, cmdTabs = p.Tab.Update(msg)
+	p.Tabs, cmdTabs = p.Tabs.Update(msg)
 	cmds = append(cmds, cmdTabs)
 
 	return p, tea.Batch(cmds...)
@@ -79,16 +73,16 @@ func (p Panel) Render() string {
 
 func (p Panel) View() string {
 
-	Tabs := p.Tab.View()
+	Tabs := p.Tabs.View()
 	p.Size.AddUsedHeight(true, lipgloss.Height(Tabs))
 
-	t := NewTable()
+	// t := NewTable()
 
-	t.AddHeaders("Key", "Value", "Description")
-	t.AddRow("offset", "5", "About what digit start")
-	t.AddRow("limit", "10", "Limit set to the list")
-	t.AddRow("page_size", "20", "Page size")
-	t.AddRow("asss", "20", "Page size")
+	// t.AddHeaders("Key", "Value", "Description")
+	// t.AddRow("offset", "5", "About what digit start")
+	// t.AddRow("limit", "10", "Limit set to the list")
+	// t.AddRow("page_size", "20", "Page size")
+	// t.AddRow("asss", "20", "Page size")
 
 	// strings.Repeat("\n", p.Size.AvailableHeight())
 	return p.Styles.BorderLeftStyle.Render(
@@ -96,7 +90,6 @@ func (p Panel) View() string {
 			lipgloss.Left,
 			p.Render(),
 			Tabs,
-			t.View(),
 		),
 	)
 

@@ -82,10 +82,13 @@ func main() {
 
 	app.LoadConfiguration(&Configuration)
 
+	panel := ui.NewPanel(Configuration.Items[0], 1, 1)
+	panel.Tabs.AddDefaultTabs("Parameters", "Headers", "Body")
+
 	m := model{
 		keyMap: keyMap,
 		list:   ui.NewList(Configuration.Items, 1, 1),
-		panel:  ui.NewPanel(Configuration.Items[0], 1, 1),
+		panel:  panel,
 	}
 
 	p := tea.NewProgram(m, tea.WithAltScreen())
