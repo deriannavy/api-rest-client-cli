@@ -16,13 +16,14 @@ type Item struct {
 }
 
 type KeyValueObject struct {
-	Key       string `json:"key"`
-	Value     string `json:"value"`
-	ValueType string `json:"type"`
+	Key         string `json:"key"`
+	Value       string `json:"value"`
+	ValueType   string `json:"type"`
+	Description string `json:"description"`
 }
 
 type Body struct {
-	Mode string `json:"raw"`
+	Mode string `json:"mode"`
 }
 
 type Url struct {

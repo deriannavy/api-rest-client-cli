@@ -2,6 +2,7 @@ package ui
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/charmbracelet/bubbles/key"
@@ -26,6 +27,7 @@ type Tabs struct {
 }
 
 func NewTabComponent(item Item, width, height int) Tabs {
+
 	return Tabs{
 		// Item
 		item: item,
@@ -42,10 +44,35 @@ func NewTabComponent(item Item, width, height int) Tabs {
 
 func (t *Tabs) SetItem(item Item) {
 	t.item = item
+	t.SetBadges()
+}
+
+func (t *Tabs) SetBadges() {
+	for i := range t.Sections {
+		badge := ""
+		switch t.Sections[i].Name {
+		case "Headers":
+			n := len(t.item.Request.Header)
+			badge = strconv.Itoa(n)
+		case "Parameters":
+			n := len(t.item.Request.Url.Query)
+			badge = strconv.Itoa(n)
+		case "Body":
+			badge = handler.Ternary(t.item.Request.Body.Mode != "", styles.Bullet, "-")
+		}
+		t.Sections[i].SetBadge(badge)
+	}
 }
 
 func (t *Tabs) AddTab(tab Tab) {
 	t.Sections = append(t.Sections, tab)
+}
+
+func (t *Tabs) AddDefaultTabs(sections ...string) {
+	for _, s := range sections {
+		t.AddTab(Tab{Name: s})
+	}
+	t.SetBadges()
 }
 
 func (t Tabs) SectionBorderFormat(tab Tab, isSelected bool, i int) string {
