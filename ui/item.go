@@ -24,6 +24,7 @@ type KeyValueObject struct {
 
 type Body struct {
 	Mode string `json:"mode"`
+	Raw  string `json:"raw"`
 }
 
 type Url struct {

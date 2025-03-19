@@ -75,16 +75,21 @@ func (t *Tabs) AddDefaultTabs(sections ...string) {
 	t.SetBadges()
 }
 
-func (t Tabs) SectionBorderFormat(tab Tab, isSelected bool, i int) string {
+func (t Tabs) CurrentTab() Tab {
+	return t.Sections[t.index]
+}
+
+func (t Tabs) SectionFormat(tab Tab, isSelected bool, i int) string {
 	var (
-		leftBorder  = handler.Ternary(i == 0, " ", t.Styles.NormalBorderTitle.Render("│ "))
-		badgeNumber = tab.Badge
-		style       = t.Styles.NormalBorderTitle
+		leftBorder = handler.Ternary(i == 0, " ", t.Styles.NormalBorderTitle.Render("│ "))
+		style      = t.Styles.NormalBorderTitle
+		bstyle     = t.Styles.BadgeStyle
 	)
 	if isSelected {
 		style = t.Styles.SelectedBorderTitle
+		bstyle = t.Styles.BadgeSelectedStyle
 	}
-	return leftBorder + style.Render(tab.Name) + " " + t.Styles.BadgeStyle.Render(badgeNumber)
+	return leftBorder + style.Render(tab.Name) + bstyle.Render(tab.Badge)
 }
 
 func (t Tabs) Update(msg tea.Msg) (Tabs, tea.Cmd) {
@@ -123,8 +128,12 @@ func (t Tabs) View() string {
 	var b strings.Builder
 
 	for i, tab := range t.Sections {
-		fmt.Fprintf(&b, "%s", t.SectionBorderFormat(tab, i == t.index, i))
+		fmt.Fprintf(&b, "%s", t.SectionFormat(tab, i == t.index, i))
 	}
+	fmt.Fprintf(&b, "\n")
+
+	currenTab := t.CurrentTab()
+	fmt.Fprintf(&b, "%s\n", currenTab.Render(t.item))
 
 	fmt.Fprintf(&b, "\n")
 

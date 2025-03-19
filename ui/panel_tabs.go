@@ -76,14 +76,6 @@ func (p Panel) View() string {
 	Tabs := p.Tabs.View()
 	p.Size.AddUsedHeight(true, lipgloss.Height(Tabs))
 
-	// t := NewTable()
-
-	// t.AddHeaders("Key", "Value", "Description")
-	// t.AddRow("offset", "5", "About what digit start")
-	// t.AddRow("limit", "10", "Limit set to the list")
-	// t.AddRow("page_size", "20", "Page size")
-	// t.AddRow("asss", "20", "Page size")
-
 	// strings.Repeat("\n", p.Size.AvailableHeight())
 	return p.Styles.BorderLeftStyle.Render(
 		lipgloss.JoinVertical(
