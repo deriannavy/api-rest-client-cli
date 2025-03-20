@@ -50,6 +50,11 @@ func (t *Table) AddRow(row ...string) {
 	t.rows = append(t.rows, row)
 }
 
+func (t *Table) ClearRows() {
+	var rows [][]string
+	t.rows = rows
+}
+
 func (t Table) RenderHeaders() string {
 	headers := ""
 
