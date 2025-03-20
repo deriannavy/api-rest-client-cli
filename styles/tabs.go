@@ -23,11 +23,11 @@ func DefaultTabsStyle() TabsStyle {
 		SelectedTitle: lipgloss.NewStyle().Bold(true).Foreground(lipgloss.AdaptiveColor{Light: "#F793FF", Dark: "#ffffff"}).Padding(0, 0, 0, 1),
 		// The selected and normal state.
 		NormalBorderTitle:   lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#aaaaaa"}).Padding(0, 0, 0, 1), //nolint:mnd
-		SelectedBorderTitle: lipgloss.NewStyle().Bold(true).Background(lipgloss.Color("#555555")).Foreground(lipgloss.AdaptiveColor{Light: "#F793FF", Dark: "#ffffff"}).Padding(0, 0, 0, 1),
+		SelectedBorderTitle: lipgloss.NewStyle().Bold(true).Background(lipgloss.Color("#222222")).Foreground(lipgloss.AdaptiveColor{Light: "#F793FF", Dark: "#ffffff"}).Padding(0, 0, 0, 1),
 		// Cursor Style
 		SelectedCursor: lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#750404"}).Padding(0, 0, 0, 1),
 		// Badge Style
 		BadgeStyle:         lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#750404"}).Padding(0, 1, 0, 1),
-		BadgeSelectedStyle: lipgloss.NewStyle().Background(lipgloss.Color("#555555")).Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#750404"}).Padding(0, 1, 0, 1),
+		BadgeSelectedStyle: lipgloss.NewStyle().Background(lipgloss.Color("#222222")).Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#750404"}).Padding(0, 1, 0, 1),
 	}
 }

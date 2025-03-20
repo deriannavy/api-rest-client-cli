@@ -7,6 +7,185 @@
 	},
 	"item": [
 		{
+			"name": "Pokemon List",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://pokeapi.co/api/v2/pokemon?offset=5&limit=5",
+					"protocol": "https",
+					"host": [
+						"pokeapi",
+						"co"
+					],
+					"path": [
+						"api",
+						"v2",
+						"pokemon"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "5"
+						},
+						{
+							"key": "limit",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "400",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://pokeapi.co/api/v2/pokemon?offset=5&limit=10",
+							"protocol": "https",
+							"host": [
+								"pokeapi",
+								"co"
+							],
+							"path": [
+								"api",
+								"v2",
+								"pokemon"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "5"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Thu, 06 Mar 2025 19:39:56 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "235"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "public, max-age=86400, s-maxage=86400"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "etag",
+							"value": "W/\"328-Jjl2slFCGGnOkWKPx+04UK6CsZI\""
+						},
+						{
+							"key": "function-execution-id",
+							"value": "056j3b0on3oc"
+						},
+						{
+							"key": "strict-transport-security",
+							"value": "max-age=31556926"
+						},
+						{
+							"key": "x-cloud-trace-context",
+							"value": "6454c0673a39f4a24fd69a00dba20fb4"
+						},
+						{
+							"key": "x-country-code",
+							"value": "US"
+						},
+						{
+							"key": "x-orig-accept-language",
+							"value": "en-US,en;q=0.9"
+						},
+						{
+							"key": "x-powered-by",
+							"value": "Express"
+						},
+						{
+							"key": "x-served-by",
+							"value": "cache-mia-kmia1760059-MIA"
+						},
+						{
+							"key": "x-cache",
+							"value": "HIT"
+						},
+						{
+							"key": "x-cache-hits",
+							"value": "0"
+						},
+						{
+							"key": "x-timer",
+							"value": "S1741044033.662932,VS0,VE1"
+						},
+						{
+							"key": "vary",
+							"value": "Accept-Encoding,cookie,need-authorization, x-fh-requested-host, accept-encoding"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400"
+						},
+						{
+							"key": "CF-Cache-Status",
+							"value": "REVALIDATED"
+						},
+						{
+							"key": "Accept-Ranges",
+							"value": "bytes"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=m18cg8FqujEmyHxTSnucjYMA9eC%2FDp61R82671ypHqVWsUq6EoZXH1mKT%2Bn3utoD6qk%2BuuNUTomfWG2q5mjoAuKku%2BiOWyGQORRpj1O5MwuBkTujlvsKn01yfnIe\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "91c4526c7866e54a-DFW"
+						},
+						{
+							"key": "server-timing",
+							"value": "cfL4;desc=\"?proto=TCP&rtt=46285&min_rtt=46200&rtt_var=13141&sent=4&recv=6&lost=0&retrans=0&sent_bytes=2805&recv_bytes=593&delivery_rate=62189&cwnd=251&unsent_bytes=0&cid=ea3d35ee281a964c&ts=705&x=0\""
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"count\": 1304,\n    \"next\": \"https://pokeapi.co/api/v2/pokemon?offset=15&limit=10\",\n    \"previous\": \"https://pokeapi.co/api/v2/pokemon?offset=0&limit=5\",\n    \"results\": [\n        {\n            \"name\": \"charizard\",\n            \"url\": \"https://pokeapi.co/api/v2/pokemon/6/\"\n        },\n        {\n            \"name\": \"squirtle\",\n            \"url\": \"https://pokeapi.co/api/v2/pokemon/7/\"\n        },\n        {\n            \"name\": \"wartortle\",\n            \"url\": \"https://pokeapi.co/api/v2/pokemon/8/\"\n        },\n        {\n            \"name\": \"blastoise\",\n            \"url\": \"https://pokeapi.co/api/v2/pokemon/9/\"\n        },\n        {\n            \"name\": \"caterpie\",\n            \"url\": \"https://pokeapi.co/api/v2/pokemon/10/\"\n        },\n        {\n            \"name\": \"metapod\",\n            \"url\": \"https://pokeapi.co/api/v2/pokemon/11/\"\n        },\n        {\n            \"name\": \"butterfree\",\n            \"url\": \"https://pokeapi.co/api/v2/pokemon/12/\"\n        },\n        {\n            \"name\": \"weedle\",\n            \"url\": \"https://pokeapi.co/api/v2/pokemon/13/\"\n        },\n        {\n            \"name\": \"kakuna\",\n            \"url\": \"https://pokeapi.co/api/v2/pokemon/14/\"\n        },\n        {\n            \"name\": \"beedrill\",\n            \"url\": \"https://pokeapi.co/api/v2/pokemon/15/\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
 			"name": "Cifrado_INE",
 			"event": [
 				{

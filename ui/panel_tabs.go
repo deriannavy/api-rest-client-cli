@@ -39,6 +39,10 @@ func NewPanel(item Item, width, height int) Panel {
 	}
 }
 
+func (p Panel) GetItem() Item {
+	return p.Item
+}
+
 func (p *Panel) SetItem(item Item) {
 	p.Item = item
 }

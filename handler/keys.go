@@ -12,6 +12,9 @@ type KeyMap struct {
 	PrevTab key.Binding
 	NextTab key.Binding
 
+	// Keybindings to make a request.
+	MakeRequest key.Binding
+
 	// The quit keybinding. This won't be caught when filtering.
 	Quit key.Binding
 
@@ -39,6 +42,11 @@ func DefaultKeyMap() KeyMap {
 		NextTab: key.NewBinding(
 			key.WithKeys("tab"),
 			key.WithHelp("tab", "next tab"),
+		),
+		// Make a request
+		MakeRequest: key.NewBinding(
+			key.WithKeys("x"),
+			key.WithHelp("x", "make request"),
 		),
 		// Quitting.
 		Quit: key.NewBinding(

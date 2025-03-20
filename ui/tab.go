@@ -17,7 +17,7 @@ func (t *Tab) SetBadge(badge string) {
 }
 
 func (t Tab) RenderTable(data []KeyValueObject) string {
-
+	// Refac
 	var b strings.Builder
 
 	fmt.Fprintf(&b, "\n")
@@ -29,6 +29,7 @@ func (t Tab) RenderTable(data []KeyValueObject) string {
 	return b.String()
 }
 func (t Tab) RenderBody(body string) string {
+	// Refac
 	var (
 		b  strings.Builder
 		bs = strings.Split(body, "\r\n")
@@ -44,7 +45,13 @@ func (t Tab) RenderBody(body string) string {
 }
 
 func (t Tab) Render(item Item) string {
+
+	if t.Badge == "0" || t.Badge == "-" {
+		return "\n Empty..."
+	}
+
 	var st string
+
 	switch t.Name {
 	case "Headers":
 		st = t.RenderTable(item.Request.Header)
