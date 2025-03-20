@@ -67,7 +67,7 @@ func (r Request) MethodAbreviated(align string) string {
 	}
 }
 
-func (i Item) UrlFormat(ic ItemComplement) string {
+func (i Item) UrlFormat() string {
 	var (
 		protocol = i.Request.Url.Protocol
 		host     = strings.Join(i.Request.Url.Host, ".")
@@ -76,9 +76,11 @@ func (i Item) UrlFormat(ic ItemComplement) string {
 	)
 
 	urlData := []string{protocol, "://", host, "/", path, query}
-	url := strings.Join(urlData, "")
+	return strings.Join(urlData, "")
+}
 
-	return ic.Styles.UrlStyle.Render(url)
+func (i Item) UrlFormatStyle(ic ItemComplement) string {
+	return ic.Styles.UrlStyle.Render(i.UrlFormat())
 }
 
 func (i Item) MethodFormat(align string, abreviated bool) string {

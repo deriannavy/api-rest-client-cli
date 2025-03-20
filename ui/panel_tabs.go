@@ -21,6 +21,8 @@ type Panel struct {
 	Tabs           Tabs
 	// Item
 	Item Item
+	// Refac
+	Response string
 }
 
 func NewPanel(item Item, width, height int) Panel {
@@ -36,6 +38,8 @@ func NewPanel(item Item, width, height int) Panel {
 		Tabs:           NewTabComponent(item, width, 1),
 		// Item
 		Item: item,
+		// Refac
+		Response: "info",
 	}
 }
 
@@ -69,7 +73,7 @@ func (p Panel) Render() string {
 
 	fmt.Fprintf(&b, "%s\n", p.Item.TitleFormat(p.ItemComplement, true))
 	p.Size.AddUsedHeight(false, 2)
-	fmt.Fprintf(&b, "%s%s\n", p.Item.MethodFormatStyle(p.ItemComplement, "left", false), p.Item.UrlFormat(p.ItemComplement))
+	fmt.Fprintf(&b, "%s%s\n", p.Item.MethodFormatStyle(p.ItemComplement, "left", false), p.Item.UrlFormatStyle(p.ItemComplement))
 	p.Size.AddUsedHeight(false, 1)
 
 	return b.String()
@@ -86,6 +90,7 @@ func (p Panel) View() string {
 			lipgloss.Left,
 			p.Render(),
 			Tabs,
+			p.Response,
 		),
 	)
 
