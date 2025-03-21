@@ -21,10 +21,9 @@ var (
 )
 
 type model struct {
-	keyMap   handler.KeyMap
-	list     ui.List
-	panel    ui.Panel
-	response string
+	keyMap handler.KeyMap
+	list   ui.List
+	panel  ui.Panel
 }
 
 func (m model) Init() tea.Cmd {
@@ -41,14 +40,13 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case key.Matches(msg, m.keyMap.MakeRequest):
 			item := m.panel.GetItem()
-			data := MakeRequest(item)
-			m.response = data
+			m.panel.Response = MakeRequest(item)
 		}
 	case tea.WindowSizeMsg:
 		h, v := AppStyle.GetFrameSize()
 		listMaxWidth := 25 // Refac
 
-		m.list.Size.SetSize(listMaxWidth-h, msg.Height-(v+3)) // remover el +3
+		m.list.Size.SetSize(listMaxWidth-h, msg.Height-(v+3)) // Refac remover el +3
 		m.list.ItemComplement.Size.SetWidth(listMaxWidth)
 
 		m.panel.Size.SetSize(msg.Width, msg.Height-v)
@@ -81,7 +79,6 @@ func (m model) View() string {
 			lipgloss.Top,
 			m.list.View(),
 			m.panel.View(),
-			m.response,
 		),
 	)
 }
@@ -90,14 +87,13 @@ func main() {
 
 	app.LoadConfiguration(&Configuration)
 
-	panel := ui.NewPanel(Configuration.Items[0], 1, 1)
-	panel.Tabs.AddDefaultTabs("Parameters", "Headers", "Body")
-
 	m := model{
 		keyMap: keyMap,
 		list:   ui.NewList(Configuration.Items, 1, 1),
-		panel:  panel,
+		panel:  ui.NewPanel(Configuration.Items[0], 1, 1),
 	}
+
+	m.panel.Tabs.AddDefaultTabs("Parameters", "Headers", "Body")
 
 	p := tea.NewProgram(m, tea.WithAltScreen())
 
