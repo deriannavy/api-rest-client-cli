@@ -9,7 +9,7 @@ Api rest client to make request on backend services, access by cli terminal
 - [x] Show headers
 - [x] Show Body
 - [x] Show Params
-- [ ] Make a request
+- [x] Make a request
 - [ ] Show that request in iterable
 - [ ] Create a request
 - [ ] Modify Body
